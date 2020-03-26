@@ -40,12 +40,12 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
-      color: 'inherit',
+      color: theme.palette.primary.contrastText,
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('sm')]: {
@@ -57,14 +57,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-interface Tab {
-  target: Target;
-}
-
-interface Target {
-  innerText: string;
-}
 
 const Navbar = () => {
   const [currentTab, setCurrentTab] = React.useState('TODAY');
@@ -78,7 +70,7 @@ const Navbar = () => {
     setCurrentTab(innerText);
   };
   const btns = ['TODAY', 'TOMORROW', 'WEEK'];
-  // TODO переключать, если погода сегодняшняя - подсветить
+
   return (
     <div className={styles.root}>
       <ButtonGroup
@@ -101,7 +93,7 @@ const Navbar = () => {
       </ButtonGroup>
       <div className={styles.search}>
         <div className={styles.searchIcon}>
-          <SearchIcon />
+          <SearchIcon color="secondary" />
         </div>
         <InputBase
           placeholder="Search…"
@@ -109,7 +101,7 @@ const Navbar = () => {
             root: styles.inputRoot,
             input: styles.inputInput,
           }}
-          inputProps={{ 'aria-label': 'search' }}
+          inputProps={{ 'aria-label': 'search city' }}
         />
       </div>
     </div>
