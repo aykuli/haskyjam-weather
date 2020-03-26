@@ -4,7 +4,6 @@ const getCoordinates = async () => {
   const response = await fetch(`https://ipinfo.io?token=${IP_INFO_KEY}`);
   const data = await response.json();
   const { city, country } = data;
-  console.log('data: ', data);
   const [lat, lng] = data.loc.split(',');
   return {
     latitude: Number(lat),

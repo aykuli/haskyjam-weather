@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
 import getCoordinates from './services/get-coordinates';
+import getWeather from './services/get-weather';
+
+import MainBoard from './components/main-board';
 
 function App() {
   const [placeInfo, setPlaceInfo] = useState({ latitude: 0, longitude: 0 });
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
 
   useEffect(() => {
     getCoordinates().then((data) => {
       setPlaceInfo(data);
+      setCity(data.city);
+      setCountry(data.country);
+      getWeather(data.latitude, data.longitude, 'en');
     });
   }, []);
 
@@ -18,8 +26,11 @@ function App() {
         <div>
           <span>{placeInfo.latitude}</span>
           <span>{placeInfo.longitude}</span>
+          <span>{city}</span>
+          <span>{country}</span>
         </div>
       )}
+      <MainBoard />
     </div>
   );
 }
