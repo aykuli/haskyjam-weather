@@ -1,31 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import getCoordinates from './services/get-coordinates';
 
 function App() {
-  // const [coordinates, setCoordinates] = useState({});
-  // console.log('coordinates: ', coordinates);
-  // getCoordinates().then(data=> {
-  //       console.log(data);
-  //       setCoordinates(data);
-  //   });
-  //   useEffect(()=> {
-  //     getCoordinates().then(data => {
-  //     console.log(data);
-  //     setCoordinates(data);
-  //   });
-  // }, [])
+  const [placeInfo, setPlaceInfo] = useState({ latitude: 0, longitude: 0 });
 
-  console.log('getCoordinates: ', getCoordinates());
+  useEffect(() => {
+    getCoordinates().then((data) => {
+      setPlaceInfo(data);
+    });
+  }, []);
+
   return (
     <div>
       <header>Hello</header>
-      {/* {coordinates.latitude === 0 ? null : (
-      <div>
-        <span>{coordinates.latitude}, </span>
-        <span>{coordinates.longitude}</span>
-      </div>
-      )} */}
+      {placeInfo.latitude === 0 ? null : (
+        <div>
+          <span>{placeInfo.latitude}</span>
+          <span>{placeInfo.longitude}</span>
+        </div>
+      )}
     </div>
   );
 }
