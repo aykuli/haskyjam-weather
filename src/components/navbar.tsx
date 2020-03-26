@@ -1,7 +1,10 @@
+/* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { InputBase, ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
+
+import { NAVBAR_BTNS } from '../constantas/common';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -9,12 +12,18 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
-      height: 64,
+      flexWrap: 'wrap',
       backgroundColor: theme.palette.primary.main,
-      padding: '0 10px 10px',
+      padding: 10,
     },
     activeTab: {
       backgroundColor: theme.palette.primary.dark,
+    },
+    btnGroup: {
+      ['@media (max-width:600px)']: {
+        marginBottom: 20,
+        margin: 'auto',
+      },
     },
     search: {
       position: 'relative',
@@ -29,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: theme.spacing(1),
         width: 'auto',
       },
+      ['@media (max-width:600px)']: {
+        marginBottom: 10,
+      },
     },
     searchIcon: {
       padding: theme.spacing(0, 2),
@@ -40,6 +52,8 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      minWidth: 250,
+      width: '100%',
       color: theme.palette.primary.contrastText,
     },
     inputInput: {
@@ -51,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         width: '12ch',
         '&:focus': {
-          width: '20ch',
+          width: '25ch',
         },
       },
     },
@@ -69,7 +83,6 @@ const Navbar = () => {
     const { innerText } = e.target as HTMLButtonElement;
     setCurrentTab(innerText);
   };
-  const btns = ['TODAY', 'TOMORROW', 'WEEK'];
 
   return (
     <div className={styles.root}>
@@ -77,9 +90,9 @@ const Navbar = () => {
         size="large"
         color="secondary"
         aria-label="wheather for today, tomorrow or for week"
+        className={styles.btnGroup}
       >
-        {btns.map((btn) => {
-          console.log('btn: ', btn);
+        {NAVBAR_BTNS.map((btn) => {
           return (
             <Button
               key={btn}

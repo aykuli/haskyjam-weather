@@ -48,7 +48,7 @@ const theme = createMuiTheme({
       lineHeight: '1.2',
       fontWeight: 'bold',
       color: '#3d4451',
-      padding: '10px 0 20px',
+      padding: '5px 0 5px',
     },
     h6: {
       fontSize: '1.2rem',
@@ -58,9 +58,9 @@ const theme = createMuiTheme({
       margin: '10px 0 10px',
     },
     body1: {
-      fontSize: '1.25rem',
+      fontSize: '1.6rem',
       lineHeight: '1.6',
-      color: '#000000',
+      color: '#3d4451',
     },
     body2: {
       fontSize: '1rem',

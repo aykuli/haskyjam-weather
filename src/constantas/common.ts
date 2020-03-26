@@ -1,0 +1,1 @@
+export const NAVBAR_BTNS = ['TODAY', 'TOMORROW', 'WEEK'];

@@ -6,8 +6,9 @@ import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
 
-import MainBoard from './main-board';
 import Navbar from './navbar';
+import CurrentWeather from './current-weather';
+import SavedCities from './saved-cities';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -22,16 +23,16 @@ const App = () => {
   const styles = useStyles();
 
   const [placeInfo, setPlaceInfo] = useState({ latitude: 0, longitude: 0 });
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [currentTemp, setCurrentTemp] = useState(null);
+  const [city, setCity] = useState('Moscow');
+  const [countryCode, setCountryCode] = useState('GB');
+  const [currentTemp, setCurrentTemp] = useState(15);
   const [weatherDesc, setWeatherDesc] = useState('null');
 
   useEffect(() => {
     getCoordinates().then((data) => {
       setPlaceInfo(data);
       setCity(data.city);
-      setCountry(data.country);
+      setCountryCode(data.country);
 
       // getWeather(data.latitude, data.longitude, 'en').then((weather) => {
       //   // console.log('weather: ', weather.weather[0].);
@@ -46,18 +47,18 @@ const App = () => {
       <CssBaseline />
       <div className={styles.container}>
         <Navbar />
-
-        {placeInfo.latitude === 0 ? null : (
-          <div>
-            <span>{placeInfo.latitude}</span>
-            <span>{placeInfo.longitude}</span>
-            <p>{city}</p>
-            <p>{country}</p>
-            {currentTemp ? <p>{`${currentTemp} grad`}</p> : null}
-            {weatherDesc ? <p>{weatherDesc}</p> : null}
-          </div>
+        {placeInfo.latitude !== 0 ? (
+          <CurrentWeather
+            temperature={currentTemp}
+            city={city}
+            countryCode={countryCode}
+            isMainPage
+            weatherInfo="Clear, wind sometimes"
+          />
+        ) : (
+          <>Sceleton will be here</>
         )}
-        <MainBoard />
+        <SavedCities />
       </div>
     </ThemeProvider>
   );
