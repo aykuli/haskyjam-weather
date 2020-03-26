@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, InputBase, ButtonGroup, Button } from '@material-ui/core';
+import { InputBase, ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
 
@@ -57,15 +57,27 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-function ResponsiveDrawer() {
-  const [currentTab, setCurrentTab] = React.useState('today');
+
+interface Tab {
+  target: Target;
+}
+
+interface Target {
+  innerText: string;
+}
+
+const Navbar = () => {
+  const [currentTab, setCurrentTab] = React.useState('TODAY');
 
   const styles = useStyles();
 
-  const handleTab = (e: any) => {
-    console.log('e: ', e.target.innerText);
+  const handleTab = (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
+  ) => {
+    const { innerText } = e.target as HTMLButtonElement;
+    setCurrentTab(innerText);
   };
-  const btns = ['today', 'tomorrow', 'week'];
+  const btns = ['TODAY', 'TOMORROW', 'WEEK'];
   // TODO переключать, если погода сегодняшняя - подсветить
   return (
     <div className={styles.root}>
@@ -74,11 +86,18 @@ function ResponsiveDrawer() {
         color="secondary"
         aria-label="wheather for today, tomorrow or for week"
       >
-        {btns.map((btn) => (
-          <Button key={btn} onClick={handleTab}>
-            {btn}
-          </Button>
-        ))}
+        {btns.map((btn) => {
+          console.log('btn: ', btn);
+          return (
+            <Button
+              key={btn}
+              onClick={handleTab}
+              className={btn === currentTab ? styles.activeTab : ''}
+            >
+              {btn}
+            </Button>
+          );
+        })}
       </ButtonGroup>
       <div className={styles.search}>
         <div className={styles.searchIcon}>
@@ -95,6 +114,6 @@ function ResponsiveDrawer() {
       </div>
     </div>
   );
-}
+};
 
-export default ResponsiveDrawer;
+export default Navbar;
