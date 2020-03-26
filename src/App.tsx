@@ -9,13 +9,20 @@ function App() {
   const [placeInfo, setPlaceInfo] = useState({ latitude: 0, longitude: 0 });
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
+  const [currentTemp, setCurrentTemp] = useState(null);
+  const [weatherDesc, setWeatherDesc] = useState('null');
 
   useEffect(() => {
     getCoordinates().then((data) => {
       setPlaceInfo(data);
       setCity(data.city);
       setCountry(data.country);
-      getWeather(data.latitude, data.longitude, 'en');
+
+      getWeather(data.latitude, data.longitude, 'en').then((weather) => {
+        // console.log('weather: ', weather.weather[0].);
+        setCurrentTemp(weather.main.temp);
+        setWeatherDesc(weather.weather[0].description);
+      });
     });
   }, []);
 
@@ -26,8 +33,10 @@ function App() {
         <div>
           <span>{placeInfo.latitude}</span>
           <span>{placeInfo.longitude}</span>
-          <span>{city}</span>
-          <span>{country}</span>
+          <p>{city}</p>
+          <p>{country}</p>
+          {currentTemp ? <p>{currentTemp} grad</p> : null}
+          {weatherDesc ? <p>{weatherDesc}</p> : null}
         </div>
       )}
       <MainBoard />

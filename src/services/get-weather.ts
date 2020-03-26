@@ -7,11 +7,7 @@ const getWeather = async (latitude: number, longitude: number, lang: string) => 
 
   const response = await fetch(url);
   const data = await response.json();
-  console.log('data: ', data);
-  return 0;
-  //   return {
-  //     data,
-  //   };
+  return data;
 };
 
 export default getWeather;
