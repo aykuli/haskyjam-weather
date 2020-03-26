@@ -50,14 +50,14 @@ module.exports = {
     'no-underscore-dangle': [0],
     'react/jsx-wrap-multilines': [0],
     'react/jsx-props-no-spreading': [0],
-    'no-console': 'off', // fro development mode
+    'no-console': 'off', // for development mode
     'react/display-name': [0],
     '@typescript-eslint/no-unused-vars': [2],
     '@typescript-eslint/no-explicit-any': [0],
   },
   overrides: [
     {
-      files: ['*.js'],
+      files: ['*.js', '*.ts'],
     },
   ],
 };
