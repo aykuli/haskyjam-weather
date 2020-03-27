@@ -2,7 +2,15 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography, Button, Fab, Tooltip } from '@material-ui/core';
+import {
+  Typography,
+  Button,
+  Fab,
+  Tooltip,
+  Card,
+  CardActions,
+  CardContent,
+} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 // TODO delete interpolate
@@ -25,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   city: {
+    position: 'relative',
     backgroundColor: theme.palette.primary.light,
     height: 100,
     opacity: 0.8,
@@ -38,8 +47,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   deleteBtn: {
     position: 'absolute',
     zIndex: 1,
-    top: 10,
-    right: 10,
+    top: 5,
+    right: 5,
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: 'transparent',
+      boxShadow: theme.shadows[2],
+    },
   },
 }));
 // TODO сохраняем в историю id, координаты и название города. координаты - для поиска погоды потом точно, название города - для показа на панели. id - чтобы удалить потом из истории при необходимости.
@@ -97,24 +112,24 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
             const color = colormap[i];
             const { id, city } = cityData;
             return (
-              <Button
-                variant="contained"
-                key={id}
-                className={styles.city}
-                style={{ backgroundColor: color }}
-              >
-                {city}
-                <Tooltip title={`Delete ${city}`} aria-label="Clear history">
-                  <Fab
-                    size="small"
-                    color="primary"
-                    className={styles.deleteBtn}
-                    onClick={() => handleDeleteCity(id)}
-                  >
-                    <DeleteIcon />
-                  </Fab>
-                </Tooltip>
-              </Button>
+              <Card key={id} className={styles.city} style={{ backgroundColor: color }}>
+                <CardContent>
+                  <Typography variant="h3" component="span">
+                    {city}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Tooltip title={`Delete ${city}`} aria-label="Clear history">
+                    <Fab
+                      size="small"
+                      className={styles.deleteBtn}
+                      onClick={() => handleDeleteCity(id)}
+                    >
+                      <DeleteIcon />
+                    </Fab>
+                  </Tooltip>
+                </CardActions>
+              </Card>
             );
           })}
           <Button variant="contained" className={styles.showHistory}>

@@ -77,7 +77,7 @@ const App = () => {
   }, [citiesList]);
 
   const handleAddCity = (): void => {
-  const id = fakerator.random.masked('aaa-AAA_999999:*');
+    const id = fakerator.random.masked('aaa-AAA_999999:*');
     const newCitiesList = [
       {
         id,
@@ -96,8 +96,14 @@ const App = () => {
     setCitiesList([]);
   };
 
-  const handleDeleteCity = (item: any) => {
-    console.log('item: ', item);
+  const handleDeleteCity = (itemId: any) => {
+    console.log('itemId: ', itemId);
+    // const newCitiesList = citiesList.map((item, i) => {
+    //   if (item.id !== itemId) {
+    //     return item;
+    //   }
+    // });
+    // console.log('newCitiesList: ', newCitiesList)
   };
 
   return (
