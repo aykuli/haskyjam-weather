@@ -29,18 +29,18 @@ const App = () => {
   const [weatherDesc, setWeatherDesc] = useState('null');
 
   useEffect(() => {
-    getCoordinates().then((data) => {
-      setPlaceInfo(data);
-      setCity(data.city);
-      setCountryCode(data.country);
-
-      // getWeather(data.latitude, data.longitude, 'en').then((weather) => {
-      //   // console.log('weather: ', weather.weather[0].);
-      //   setCurrentTemp(weather.main.temp);
-      //   setWeatherDesc(weather.weather[0].description);
-      // });
-    });
+    // getCoordinates().then((data) => {
+    //   setPlaceInfo(data);
+    //   setCity(data.city);
+    //   setCountryCode(data.country);
+    // getWeather(data.latitude, data.longitude, 'en').then((weather) => {
+    //   // console.log('weather: ', weather.weather[0].);
+    //   setCurrentTemp(weather.main.temp);
+    //   setWeatherDesc(weather.weather[0].description);
+    // });
+    // });
   }, []);
+  const citiesList = ['city0', 'city1', 'city2', 'city3', 'city4', 'city5', 'city6', 'city7'];
 
   return (
     <ThemeProvider theme={theme}>
@@ -58,7 +58,7 @@ const App = () => {
         ) : (
           <>Sceleton will be here</>
         )}
-        <SavedCities />
+        <SavedCities citiesList={citiesList} />
       </div>
     </ThemeProvider>
   );

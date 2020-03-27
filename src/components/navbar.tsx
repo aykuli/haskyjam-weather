@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.primary.dark,
     },
     btnGroup: {
-      ['@media (max-width:600px)']: {
+      ['@media (max-width: 600px)']: {
         marginBottom: 20,
         margin: 'auto',
       },
