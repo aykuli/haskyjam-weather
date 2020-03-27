@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-end',
       flexWrap: 'wrap',
       backgroundColor: theme.palette.primary.main,
-      padding: 10,
+      padding: '10px 40px',
     },
     activeTab: {
       backgroundColor: theme.palette.primary.dark,
     },
     btnGroup: {
-      ['@media (max-width: 600px)']: {
+      ['@media (max-width: 624px)']: {
         marginBottom: 20,
         margin: 'auto',
       },
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: theme.spacing(1),
         width: 'auto',
       },
-      ['@media (max-width:600px)']: {
+      ['@media (max-width: 624px)']: {
         marginBottom: 10,
       },
     },

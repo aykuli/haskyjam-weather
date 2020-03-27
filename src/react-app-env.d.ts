@@ -5,3 +5,4 @@ declare namespace NodeJS {
   }
 }
 declare module 'fakerator';
+declare module 'd3-ease';
