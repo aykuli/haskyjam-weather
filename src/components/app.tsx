@@ -26,19 +26,25 @@ const App = () => {
   const [placeInfo, setPlaceInfo] = useState({ latitude: 0, longitude: 0 });
   const [city, setCity] = useState('Moscow');
   const [countryCode, setCountryCode] = useState('GB');
-  const [currentTemp, setCurrentTemp] = useState(15);
-  const [weatherDesc, setWeatherDesc] = useState('null');
+  const [currentTemperature, setCurrentTemperature] = useState(15);
+  const [weatherDescription, setWeatherDescription] = useState('null');
 
   useEffect(() => {
     getCoordinates().then((data) => {
       setPlaceInfo(data);
       setCity(data.city);
       setCountryCode(data.country);
-    // getWeather(data.latitude, data.longitude, 'en').then((weather) => {
-    //   // console.log('weather: ', weather.weather[0].);
-    //   setCurrentTemp(weather.main.temp);
-    //   setWeatherDesc(weather.weather[0].description);
-    // });
+      console.log('data: ', data);
+      getWeather(data.latitude, data.longitude, 'en')
+        .then((weather) => {
+          console.log('weather: ', weather);
+          setCurrentTemperature(weather.currently.temperature);
+          const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`
+          setWeatherDescription(txt);
+        })
+        .catch((e) => {
+          console.log('e: ', e);
+        });
     });
   }, []);
   const citiesList = ['city0', 'city1', 'city2', 'city3', 'city4', 'city5', 'city6', 'city7'];
@@ -50,11 +56,11 @@ const App = () => {
         <Navbar />
         {placeInfo.latitude !== 0 ? (
           <CurrentWeather
-            temperature={currentTemp}
+            temperature={currentTemperature}
             city={city}
             countryCode={countryCode}
             isMainPage
-            weatherInfo="Clear, wind sometimes"
+            weatherInfo={weatherDescription}
           />
         ) : (
           <>Sceleton will be here</>

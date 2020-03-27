@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
 import interpolate from 'color-interpolate';
 
 import theme from '../themes/theme';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -21,7 +21,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.primary.light,
   },
 }));
-const colormap = interpolate([theme.palette.primary.dark, theme.palette.primary.light,theme.palette.primary.main, theme.palette.secondary.main]);
+const colormap = interpolate([
+  theme.palette.primary.dark,
+  theme.palette.primary.light,
+  theme.palette.primary.main,
+  theme.palette.secondary.main,
+]);
 
 const Week = () => {
   const styles = useStyles();
