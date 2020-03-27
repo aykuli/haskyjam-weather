@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
+import Fakerator from 'fakerator';
 
 import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
@@ -17,11 +18,6 @@ import FAKE_HISTORY from '../services/fake-history';
 interface Coordinates {
   latitude: number;
   longitude: number;
-}
-
-interface HistoryData {
-  city: string;
-  coordinates: Coordinates;
 }
 
 const useStyles = makeStyles(() => ({
@@ -48,6 +44,7 @@ const useStyles = makeStyles(() => ({
 
 const App = () => {
   const styles = useStyles();
+  const fakerator = Fakerator('en-EN');
 
   const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
   const [city, setCity] = useState<string>('Moscow');
@@ -80,8 +77,10 @@ const App = () => {
   }, [citiesList]);
 
   const handleAddCity = (): void => {
+  const id = fakerator.random.masked('aaa-AAA_999999:*');
     const newCitiesList = [
       {
+        id,
         city,
         coordinates,
       },

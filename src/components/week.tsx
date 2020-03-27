@@ -1,8 +1,7 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
-import interpolate from 'color-interpolate';
+import { Button } from '@material-ui/core';
 
 import theme from '../themes/theme';
 
@@ -21,12 +20,16 @@ const useStyles = makeStyles(() => ({
     backgroundColor: theme.palette.primary.light,
   },
 }));
-const colormap = interpolate([
+const colormap = [
   theme.palette.primary.dark,
   theme.palette.primary.light,
   theme.palette.primary.main,
   theme.palette.secondary.main,
-]);
+  theme.palette.primary.dark,
+  theme.palette.primary.light,
+  theme.palette.primary.main,
+  theme.palette.secondary.main,
+];
 
 const Week = () => {
   const styles = useStyles();
@@ -36,7 +39,7 @@ const Week = () => {
     <div className={styles.container}>
       <div className={styles.weekDays}>
         {weekDays.map((day: string, i: number) => {
-          const color = colormap(Math.random());
+          const color = colormap[i];
           return (
             <Button
               variant="contained"

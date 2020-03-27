@@ -50,6 +50,7 @@ interface SavedCitiesProps {
 }
 
 interface CityData {
+  id: string;
   city: string;
   coordinates: {
     latitude: number;
@@ -94,20 +95,21 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
         <div className={styles.citiesList}>
           {showList.map((cityData: CityData, i: number) => {
             const color = colormap[i];
-            const { city } = cityData;
+            const { id, city } = cityData;
             return (
               <Button
                 variant="contained"
-                key={`${city}-${i}`}
+                key={id}
                 className={styles.city}
                 style={{ backgroundColor: color }}
               >
                 {city}
                 <Tooltip title={`Delete ${city}`} aria-label="Clear history">
                   <Fab
+                    size="small"
                     color="primary"
                     className={styles.deleteBtn}
-                    onClick={() => handleDeleteCity(city)}
+                    onClick={() => handleDeleteCity(id)}
                   >
                     <DeleteIcon />
                   </Fab>

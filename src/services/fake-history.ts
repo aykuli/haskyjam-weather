@@ -1,5 +1,6 @@
 export default [
   {
+    id: 'aaa-AAA_999999:0',
     city: 'London',
     coordinates: {
       latitude: 51.5072,
@@ -7,6 +8,7 @@ export default [
     },
   },
   {
+    id: 'aaa-AAA_999999:1',
     city: 'Sydney',
     coordinates: {
       latitude: 33.5,
@@ -14,6 +16,7 @@ export default [
     },
   },
   {
+    id: 'aaa-AAA_999999:2',
     city: 'Rio',
     coordinates: {
       latitude: 22.5,
