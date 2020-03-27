@@ -14,14 +14,24 @@ import Week from './week';
 
 const useStyles = makeStyles(() => ({
   container: {
+    position: 'relative',
     maxWidth: 1200,
     height: '95%',
     margin: '20px auto',
     boxShadow: theme.shadows[5],
   },
   sceleton: {
-    margin: 'auto',
-  }
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  addBtn: {
+    position: 'absolute',
+    top: 70,
+    right: 10,
+  },
 }));
 
 const App = () => {
@@ -43,7 +53,7 @@ const App = () => {
         .then((weather) => {
           console.log('weather: ', weather);
           setCurrentTemperature(weather.currently.temperature);
-          const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`
+          const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
           setWeatherDescription(txt);
         })
         .catch((e) => {
@@ -68,8 +78,10 @@ const App = () => {
           />
         ) : (
           <div className={styles.sceleton}>
-            <Skeleton variant="text" />
-            <Skeleton variant="rect" width={210} height={118} />
+            <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />
+            <Skeleton variant="text" width={50} height={70} />
+            <Skeleton variant="text" width={300} height={50} />
+            <Skeleton variant="rect" width={300} height={118} />
           </div>
         )}
         <SavedCities citiesList={citiesList} />
