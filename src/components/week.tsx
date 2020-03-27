@@ -25,11 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface WeekInfo {
   data: any; // TODO check all any types
 }
-interface WeekDaysList {
-  weekDay: string;
-  date: string;
-  temperature: number;
-}
+// TODO icons
 
 const Week: React.FC<WeekInfo> = ({ data }) => {
   const styles = useStyles();
@@ -83,7 +79,7 @@ const Week: React.FC<WeekInfo> = ({ data }) => {
                     {weekDay}
                   </Typography>
                   <Typography variant="h1" component="p" className={styles.temperature}>
-                    {temperature}
+                    {`${temperature} °C`}
                   </Typography>
                 </Paper>
               );
