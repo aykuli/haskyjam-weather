@@ -31,6 +31,7 @@ const getDate = (lang: string) => {
   });
   return formatter.format(date);
 };
+
 interface CurrentWeatherProps {
   temperature: number | null;
   city: string | null;

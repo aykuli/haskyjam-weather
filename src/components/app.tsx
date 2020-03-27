@@ -13,6 +13,8 @@ import Navbar from './navbar';
 import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
+import DayWeather from './day-weather';
+
 import { CITIES_LIST } from '../constantas/common';
 import FAKE_HISTORY from '../services/fake-history';
 
@@ -52,6 +54,8 @@ const App = () => {
   const [countryCode, setCountryCode] = useState<string>('RU');
   const [currentTemperature, setCurrentTemperature] = useState(null);
   const [weatherDescription, setWeatherDescription] = useState<string>('');
+  const [weather48Hours, setWeather48Hours] = useState(null);
+  const [weatherWeek, setWeatherWeek] = useState(null);
 
   const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
   const list = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
@@ -67,6 +71,8 @@ const App = () => {
       getWeather(data.latitude, data.longitude, 'en')
         .then((weather) => {
           console.log('weather: ', weather);
+          setWeather48Hours(weather.hourly);
+          setWeatherWeek(weather.daily);
           setCurrentTemperature(weather.currently.temperature);
           const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
           setWeatherDescription(txt);
@@ -104,6 +110,12 @@ const App = () => {
     setCitiesList(newCitiesList);
   };
 
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -131,7 +143,9 @@ const App = () => {
           handleClearHistory={handleClearHistory}
           handleDeleteCity={handleDeleteCity}
         />
-        {/* <Week /> */}
+        <Week data={weatherWeek} />
+        {/* <DayWeather title="Today" data={weather48Hours} />
+        <DayWeather title="Tomorrow" data={weather48Hours} /> */}
       </div>
     </ThemeProvider>
   );

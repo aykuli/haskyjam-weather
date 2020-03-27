@@ -1,22 +1,23 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 import theme from '../themes/theme';
 
 const useStyles = makeStyles(() => ({
-  container: {
+  weekDays: {
     display: 'flex',
-    flexDirection: 'column',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
     padding: '10px 10px 40px',
   },
-  weekDays: {},
   day: {
-    width: 50,
-    height: 50,
+    margin: theme.spacing(1),
+    minWidth: 200,
+    height: theme.spacing(16),
+    // height: 50,
     backgroundColor: theme.palette.primary.light,
   },
 }));
@@ -31,27 +32,24 @@ const colormap = [
   theme.palette.secondary.main,
 ];
 
-const Week = () => {
+interface WeekInfo {
+  data: any; // TODO check all any types
+}
+
+const Week: React.FC<WeekInfo> = ({ data }) => {
   const styles = useStyles();
   const weekDays = ['1', '2', '3', '4', '5', '6', '7'];
+  console.log('week data: ', data);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.weekDays}>
-        {weekDays.map((day: string, i: number) => {
-          const color = colormap[i];
-          return (
-            <Button
-              variant="contained"
-              key={day}
-              className={styles.day}
-              style={{ backgroundColor: color }}
-            >
-              {day}
-            </Button>
-          );
-        })}
-      </div>
+    <div className={styles.weekDays}>
+      {weekDays.map((day: string, i: number) => {
+        return (
+          <Paper elevation={1} className={styles.day}>
+            {day}
+          </Paper>
+        );
+      })}
     </div>
   );
 };
