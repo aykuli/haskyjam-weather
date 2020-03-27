@@ -12,6 +12,7 @@ import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
 import { CITIES_LIST } from '../constantas/common';
+import FAKE_HISTORY from '../services/fake-history';
 
 interface Coordinates {
   latitude: number;
@@ -56,7 +57,7 @@ const App = () => {
 
   const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
   const list = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
-  const [citiesList, setCitiesList] = useState(list);
+  const [citiesList, setCitiesList] = useState(FAKE_HISTORY); // TODO remove FAKE and place list
 
   useEffect(() => {
     getCoordinates().then((data) => {
@@ -80,11 +81,11 @@ const App = () => {
 
   const handleAddCity = (): void => {
     const newCitiesList = [
-      ...citiesList,
       {
         city,
         coordinates,
       },
+      ...citiesList,
     ];
     setCitiesList(newCitiesList);
     localStorage.removeItem(CITIES_LIST);
@@ -94,6 +95,10 @@ const App = () => {
   const handleClearHistory = (): void => {
     localStorage.removeItem(CITIES_LIST);
     setCitiesList([]);
+  };
+
+  const handleDeleteCity = (item: any) => {
+    console.log('item: ', item);
   };
 
   return (
@@ -118,8 +123,12 @@ const App = () => {
             handleAddCity={handleAddCity}
           />
         )}
-        <SavedCities citiesList={citiesList} handleClearHistory={handleClearHistory} />
-        <Week />
+        <SavedCities
+          citiesList={citiesList}
+          handleClearHistory={handleClearHistory}
+          handleDeleteCity={handleDeleteCity}
+        />
+        {/* <Week /> */}
       </div>
     </ThemeProvider>
   );

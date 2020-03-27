@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface SavedCitiesProps {
   citiesList: any;
   handleClearHistory: () => void;
+  handleDeleteCity: (item: any) => void;
 }
 
 interface CityData {
@@ -66,7 +67,11 @@ const colormap = [
   '#FFF5D8',
 ];
 
-const SavedCities: React.FC<SavedCitiesProps> = ({ citiesList, handleClearHistory }) => {
+const SavedCities: React.FC<SavedCitiesProps> = ({
+  citiesList,
+  handleClearHistory,
+  handleDeleteCity,
+}) => {
   const styles = useStyles();
 
   const showList = citiesList.length < 8 ? citiesList : citiesList.slice(0, 7);
@@ -89,14 +94,24 @@ const SavedCities: React.FC<SavedCitiesProps> = ({ citiesList, handleClearHistor
         <div className={styles.citiesList}>
           {showList.map((cityData: CityData, i: number) => {
             const color = colormap[i];
+            const { city } = cityData;
             return (
               <Button
                 variant="contained"
-                key={`${cityData.city}-${i}`}
+                key={`${city}-${i}`}
                 className={styles.city}
                 style={{ backgroundColor: color }}
               >
-                {cityData.city}
+                {city}
+                <Tooltip title={`Delete ${city}`} aria-label="Clear history">
+                  <Fab
+                    color="primary"
+                    className={styles.deleteBtn}
+                    onClick={() => handleDeleteCity(city)}
+                  >
+                    <DeleteIcon />
+                  </Fab>
+                </Tooltip>
               </Button>
             );
           })}
