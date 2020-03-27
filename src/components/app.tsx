@@ -7,6 +7,7 @@ import Fakerator from 'fakerator';
 import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
+import getRandomColor from '../services/color-generator';
 
 import Navbar from './navbar';
 import CurrentWeather from './current-weather';
@@ -78,8 +79,10 @@ const App = () => {
 
   const handleAddCity = (): void => {
     const id = fakerator.random.masked('aaa-AAA_999999:*');
+    const color = getRandomColor();
     const newCitiesList = [
       {
+        color,
         id,
         city,
         coordinates,
@@ -96,14 +99,9 @@ const App = () => {
     setCitiesList([]);
   };
 
-  const handleDeleteCity = (itemId: any) => {
-    console.log('itemId: ', itemId);
-    // const newCitiesList = citiesList.map((item, i) => {
-    //   if (item.id !== itemId) {
-    //     return item;
-    //   }
-    // });
-    // console.log('newCitiesList: ', newCitiesList)
+  const handleDeleteCity = (itemId: string) => {
+    const newCitiesList = citiesList.filter((item) => item.id !== itemId);
+    setCitiesList(newCitiesList);
   };
 
   return (

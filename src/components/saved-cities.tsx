@@ -56,12 +56,18 @@ const useStyles = makeStyles((theme: Theme) => ({
       boxShadow: theme.shadows[2],
     },
   },
+  deleteAllBtn: {
+    position: 'absolute',
+    zIndex: 1,
+    top: 10,
+    right: 10,
+  },
 }));
 // TODO сохраняем в историю id, координаты и название города. координаты - для поиска погоды потом точно, название города - для показа на панели. id - чтобы удалить потом из истории при необходимости.
 interface SavedCitiesProps {
   citiesList: any;
   handleClearHistory: () => void;
-  handleDeleteCity: (item: any) => void;
+  handleDeleteCity: (item: string) => void;
 }
 
 interface CityData {
@@ -71,17 +77,8 @@ interface CityData {
     latitude: number;
     longitude: number;
   };
+  color: string;
 }
-const colormap = [
-  '#3FB4F5',
-  '#CE494C',
-  'rgb(226, 190, 217)',
-  '#FFF5D8',
-  '#68D3BB',
-  '#E7DDFF',
-  '#285FAA',
-  '#FFF5D8',
-];
 
 const SavedCities: React.FC<SavedCitiesProps> = ({
   citiesList,
@@ -98,7 +95,7 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
         Saved Cities
       </Typography>
       <Tooltip title="Clear history" aria-label="Clear history">
-        <Fab color="primary" className={styles.deleteBtn} onClick={handleClearHistory}>
+        <Fab color="primary" className={styles.deleteAllBtn} onClick={handleClearHistory}>
           <DeleteIcon />
         </Fab>
       </Tooltip>
@@ -109,8 +106,7 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
       ) : (
         <div className={styles.citiesList}>
           {showList.map((cityData: CityData, i: number) => {
-            const color = colormap[i];
-            const { id, city } = cityData;
+            const { id, city, color } = cityData;
             return (
               <Card key={id} className={styles.city} style={{ backgroundColor: color }}>
                 <CardContent>
