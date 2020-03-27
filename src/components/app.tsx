@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import theme from '../themes/theme';
@@ -18,6 +19,9 @@ const useStyles = makeStyles(() => ({
     margin: '20px auto',
     boxShadow: theme.shadows[5],
   },
+  sceleton: {
+    margin: 'auto',
+  }
 }));
 
 const App = () => {
@@ -63,7 +67,10 @@ const App = () => {
             weatherInfo={weatherDescription}
           />
         ) : (
-          <>Sceleton will be here</>
+          <div className={styles.sceleton}>
+            <Skeleton variant="text" />
+            <Skeleton variant="rect" width={210} height={118} />
+          </div>
         )}
         <SavedCities citiesList={citiesList} />
         <Week />
