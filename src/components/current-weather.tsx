@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+// TODO icons
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
     position: 'relative',
@@ -31,10 +32,10 @@ const getDate = (lang: string) => {
   return formatter.format(date);
 };
 interface CurrentWeatherType {
-  temperature: number;
-  city: string;
-  countryCode: string;
-  weatherInfo: string;
+  temperature: number | null;
+  city: string | null;
+  countryCode: string | null;
+  weatherInfo: string | null;
   isMainPage: boolean;
 }
 
