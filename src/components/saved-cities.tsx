@@ -1,12 +1,15 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Fab, Tooltip } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import interpolate from 'color-interpolate';
+import DeleteIcon from '@material-ui/icons/Delete';
+// TODO delete interpolate
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -32,14 +35,38 @@ const useStyles = makeStyles((theme: Theme) => ({
   showHistory: {
     height: '100%',
   },
+  deleteBtn: {
+    position: 'absolute',
+    zIndex: 1,
+    top: 10,
+    right: 10,
+  },
 }));
 // TODO сохраняем в историю id, координаты и название города. координаты - для поиска погоды потом точно, название города - для показа на панели. id - чтобы удалить потом из истории при необходимости.
-interface SavedCities {
+interface SavedCitiesProps {
   citiesList: any;
+  handleClearHistory: () => void;
 }
-const colormap = interpolate(['#CB3837', '#E7DDFF', '#009FFF', '#FFF5D8']);
 
-const SavedCities = ({ citiesList }: SavedCities) => {
+interface CityData {
+  city: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+}
+const colormap = [
+  '#3FB4F5',
+  '#CE494C',
+  'rgb(226, 190, 217)',
+  '#FFF5D8',
+  '#68D3BB',
+  '#E7DDFF',
+  '#285FAA',
+  '#FFF5D8',
+];
+
+const SavedCities: React.FC<SavedCitiesProps> = ({ citiesList, handleClearHistory }) => {
   const styles = useStyles();
 
   const showList = citiesList.length < 8 ? citiesList : citiesList.slice(0, 7);
@@ -49,22 +76,27 @@ const SavedCities = ({ citiesList }: SavedCities) => {
       <Typography variant="h2" component="h2">
         Saved Cities
       </Typography>
+      <Tooltip title="Clear history" aria-label="Clear history">
+        <Fab color="primary" className={styles.deleteBtn} onClick={handleClearHistory}>
+          <DeleteIcon />
+        </Fab>
+      </Tooltip>
       {showList.length === 0 ? (
         <Alert severity="info" variant="outlined">
           Yout history is empty. You can add place clicking on Add button higher.
         </Alert>
       ) : (
         <div className={styles.citiesList}>
-          {showList.map((city: string, i: number) => {
-            const color = colormap(Math.random());
+          {showList.map((cityData: CityData, i: number) => {
+            const color = colormap[i];
             return (
               <Button
                 variant="contained"
-                key={city}
+                key={`${cityData.city}-${i}`}
                 className={styles.city}
                 style={{ backgroundColor: color }}
               >
-                {city}
+                {cityData.city}
               </Button>
             );
           })}

@@ -13,6 +13,16 @@ import SavedCities from './saved-cities';
 import Week from './week';
 import { CITIES_LIST } from '../constantas/common';
 
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+interface HistoryData {
+  city: string;
+  coordinates: Coordinates;
+}
+
 const useStyles = makeStyles(() => ({
   container: {
     position: 'relative',
@@ -38,19 +48,23 @@ const useStyles = makeStyles(() => ({
 const App = () => {
   const styles = useStyles();
 
-  const [city, setCity] = useState('Moscow');
-  const [countryCode, setCountryCode] = useState('RU');
+  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+  const [city, setCity] = useState<string>('Moscow');
+  const [countryCode, setCountryCode] = useState<string>('RU');
   const [currentTemperature, setCurrentTemperature] = useState(null);
-  const [weatherDescription, setWeatherDescription] = useState('');
+  const [weatherDescription, setWeatherDescription] = useState<string>('');
+
   const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
-  const citiesList = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
-  console.log('citiesList: ', citiesList);
+  const list = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
+  const [citiesList, setCitiesList] = useState(list);
 
   useEffect(() => {
     getCoordinates().then((data) => {
+      console.log('data: ', data);
+      setCoordinates({ latitude: data.latitude, longitude: data.longitude });
       setCity(data.city);
       setCountryCode(data.country);
-      console.log('data: ', data);
+
       getWeather(data.latitude, data.longitude, 'en')
         .then((weather) => {
           console.log('weather: ', weather);
@@ -62,12 +76,24 @@ const App = () => {
           console.log('e: ', e);
         });
     });
-  }, []);
+  }, [citiesList]);
 
   const handleAddCity = (): void => {
-    console.log('1) citiesList: ', citiesList);
-    citiesList.push(city);
-    console.log('2) citiesList: ', citiesList);
+    const newCitiesList = [
+      ...citiesList,
+      {
+        city,
+        coordinates,
+      },
+    ];
+    setCitiesList(newCitiesList);
+    localStorage.removeItem(CITIES_LIST);
+    localStorage.setItem(CITIES_LIST, JSON.stringify(newCitiesList));
+  };
+
+  const handleClearHistory = (): void => {
+    localStorage.removeItem(CITIES_LIST);
+    setCitiesList([]);
   };
 
   return (
@@ -92,7 +118,7 @@ const App = () => {
             handleAddCity={handleAddCity}
           />
         )}
-        {/* <SavedCities citiesList={citiesList} /> */}
+        <SavedCities citiesList={citiesList} handleClearHistory={handleClearHistory} />
         <Week />
       </div>
     </ThemeProvider>
