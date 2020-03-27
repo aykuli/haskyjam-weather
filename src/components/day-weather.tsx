@@ -12,6 +12,8 @@ import {
   Paper,
 } from '@material-ui/core';
 
+import Map from './map';
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
@@ -89,6 +91,7 @@ const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
           </Table>
         </TableContainer>
       </div>
+      <Map latitude={50} longitude={82} place="MyPlace" />
     </div>
   );
 };
