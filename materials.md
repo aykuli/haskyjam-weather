@@ -8,3 +8,4 @@
 | 5 | https://www.carlrippon.com/typed-usestate-with-typescript/ | definig useState types | |
 | 6 | https://stackoverflow.com/questions/1484506/random-color-generator | color generator ||
 | 7 | https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript | time convertingfrom darksky api | |
+| 8 | https://stackoverflow.com/questions/9444745/javascript-how-to-get-tomorrows-date-in-format-dd-mm-yy | tomorrow day ||

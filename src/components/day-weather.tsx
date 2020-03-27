@@ -37,6 +37,7 @@ interface DayInfo {
 
 const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
   const styles = useStyles();
+  console.log('data: ', data);
 
   const day = title === 'Today' ? new Date() : new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
   const level = day.getDate();
@@ -60,13 +61,15 @@ const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
             <TableHead>
               <TableRow className={styles.headRow}>
                 <TableCell>Time</TableCell>
-                <TableCell>Weather</TableCell>
+                <TableCell>Temperature</TableCell>
+                <TableCell>Summary</TableCell>
+                <TableCell>Wind</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data
                 ? data.data.map((item: any) => {
-                    const { time, summary, windSpeed } = item;
+                    const { time, temperature, summary, windSpeed } = item;
                     const timeConverted = new Date(time * 1000);
                     const isRender =
                       level === timeConverted.getDate() && timeConverted.getHours() % 3 === 0;
@@ -76,7 +79,9 @@ const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
                         <TableCell component="th" scope="row">
                           {`${timeConverted.getHours()}: ${timeConverted.getMinutes()}0`}
                         </TableCell>
-                        <TableCell>{`${summary}, Wind - ${windSpeed} m/s`}</TableCell>
+                        <TableCell>{`${temperature} °C`}</TableCell>
+                        <TableCell>{summary}</TableCell>
+                        <TableCell>{`${windSpeed} m/s`}</TableCell>
                       </TableRow>
                     ) : null;
                   })

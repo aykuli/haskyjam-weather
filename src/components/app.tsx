@@ -144,8 +144,8 @@ const App = () => {
           handleDeleteCity={handleDeleteCity}
         />
         <Week data={weatherWeek} />
-        {/* <DayWeather title="Today" data={weather48Hours} />
-        <DayWeather title="Tomorrow" data={weather48Hours} /> */}
+        <DayWeather title="Today" data={weather48Hours} />
+        <DayWeather title="Tomorrow" data={weather48Hours} />
       </div>
     </ThemeProvider>
   );
