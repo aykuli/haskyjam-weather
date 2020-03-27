@@ -8,7 +8,7 @@ import { MAPBOX_TOKEN } from '../constantas/api-keys';
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     position: 'relative',
-    width: '100%',
+    marginTop: 'auto',
   },
   mapControllers: {
     position: 'absolute',
@@ -50,13 +50,14 @@ interface MapProps {
 
 const Map: React.FC<MapProps> = ({ latitude, longitude, place }) => {
   console.log(latitude);
+  console.log(longitude);
   const styles = useStyles();
   const [viewport, setViewport] = useState({
-    width: 400,
+    width: 650,
     height: 400,
-    latitude,
     longitude,
-    zoom: 10,
+    latitude,
+    zoom: 7,
     bearing: 0,
     pitch: 0,
   });

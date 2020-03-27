@@ -18,13 +18,28 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '10px 10px 40px',
+    flexWrap: 'wrap',
+    padding: 40,
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'center',
+    },
+    ['@media (max-width: 520px)']: {
+      padding: '20px 20px 40px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      padding: '10px 10px 40px',
+    },
   },
   info: {
     // border: '1px solid red',
   },
   table: {
     minWidth: 250,
+    [theme.breakpoints.down('sm')]: {
+      '& td, & td:last-child, & td:first-child': {
+        padding: '5px 7px',
+      },
+    },
   },
   headRow: {
     borderBottom: `1px solid ${theme.palette.primary.main}`,
@@ -32,12 +47,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
 interface DayInfo {
   title: string;
   data: any;
+  coordinates: Coordinates;
 }
 
-const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
+const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
   const styles = useStyles();
   const today = new Date();
   const day = title === 'Today' ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
@@ -72,13 +93,14 @@ const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
                 ? data.data.map((item: any) => {
                     const { time, temperature, summary, windSpeed } = item;
                     const timeConverted = new Date(time * 1000);
+                    const hoursView = (hour: number) => (hour < 10 ? `0${hour}` : hour);
                     const isRender =
                       level === timeConverted.getDate() && timeConverted.getHours() % 3 === 0;
 
                     return isRender ? (
                       <TableRow key={item.time}>
-                        <TableCell component="th" scope="row">
-                          {`${timeConverted.getHours()}: ${timeConverted.getMinutes()}0`}
+                        <TableCell>
+                          {`${hoursView(timeConverted.getHours())}: ${timeConverted.getMinutes()}0`}
                         </TableCell>
                         <TableCell>{`${temperature} °C`}</TableCell>
                         <TableCell>{summary}</TableCell>
@@ -91,7 +113,9 @@ const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
           </Table>
         </TableContainer>
       </div>
-      <Map latitude={50} longitude={82} place="MyPlace" />
+      {coordinates.latitude !== 0 ? (
+        <Map latitude={coordinates.latitude} longitude={coordinates.longitude} place="MyPlace" />
+      ) : null}
     </div>
   );
 };

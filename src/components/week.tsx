@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
