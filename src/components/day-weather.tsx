@@ -37,14 +37,13 @@ interface DayInfo {
 
 const DayWeather: React.FC<DayInfo> = ({ title, data }) => {
   const styles = useStyles();
-  console.log('data: ', data);
-
-  const day = title === 'Today' ? new Date() : new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+  const today = new Date();
+  const day = title === 'Today' ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
   const level = day.getDate();
   const date = day.toLocaleDateString('en-US', {
     weekday: 'long',
-    month: 'long',
     day: 'numeric',
+    month: 'long',
   });
 
   return (

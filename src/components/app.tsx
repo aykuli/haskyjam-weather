@@ -138,11 +138,11 @@ const App = () => {
             handleAddCity={handleAddCity}
           />
         )}
-        <SavedCities
+        {/* <SavedCities
           citiesList={citiesList}
           handleClearHistory={handleClearHistory}
           handleDeleteCity={handleDeleteCity}
-        />
+        /> */}
         <Week data={weatherWeek} />
         <DayWeather title="Today" data={weather48Hours} />
         <DayWeather title="Tomorrow" data={weather48Hours} />

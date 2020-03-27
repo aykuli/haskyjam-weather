@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-end',
       flexWrap: 'wrap',
       backgroundColor: theme.palette.primary.main,
-      padding: 10,
+      padding: '10px 40px',
     },
     activeTab: {
       backgroundColor: theme.palette.primary.dark,
