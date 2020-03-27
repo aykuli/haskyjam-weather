@@ -1,15 +1,23 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     boxShadow: theme.shadows[1],
+  },
+  addCity: {
+    position: 'absolute',
+    zIndex: 1,
+    top: 10,
+    right: 10,
   },
 }));
 
@@ -54,6 +62,9 @@ const CurrentWeather = ({
           </Typography>
         </>
       ) : null}
+      <Fab color="primary" aria-label="add" className={styles.addCity}>
+        <AddIcon />
+      </Fab>
     </div>
   );
 };

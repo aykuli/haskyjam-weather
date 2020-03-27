@@ -9,6 +9,7 @@ import getWeather from '../services/get-weather';
 import Navbar from './navbar';
 import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
+import Week from './week';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -29,16 +30,16 @@ const App = () => {
   const [weatherDesc, setWeatherDesc] = useState('null');
 
   useEffect(() => {
-    // getCoordinates().then((data) => {
-    //   setPlaceInfo(data);
-    //   setCity(data.city);
-    //   setCountryCode(data.country);
+    getCoordinates().then((data) => {
+      setPlaceInfo(data);
+      setCity(data.city);
+      setCountryCode(data.country);
     // getWeather(data.latitude, data.longitude, 'en').then((weather) => {
     //   // console.log('weather: ', weather.weather[0].);
     //   setCurrentTemp(weather.main.temp);
     //   setWeatherDesc(weather.weather[0].description);
     // });
-    // });
+    });
   }, []);
   const citiesList = ['city0', 'city1', 'city2', 'city3', 'city4', 'city5', 'city6', 'city7'];
 
@@ -59,6 +60,7 @@ const App = () => {
           <>Sceleton will be here</>
         )}
         <SavedCities citiesList={citiesList} />
+        <Week />
       </div>
     </ThemeProvider>
   );

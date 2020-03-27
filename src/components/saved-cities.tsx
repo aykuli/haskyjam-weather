@@ -2,6 +2,7 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
+import interpolate from 'color-interpolate';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -9,21 +10,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    padding: '10px 10px 40px',
   },
   citiesList: {
     display: 'grid',
     gridTemplateColumns: '200px 200px 200px 200px',
     gridGap: '20px 20px',
-    border: `1px solid ${theme.palette.primary.dark}`,
     ['@media (max-width: 900px)']: {
       gridTemplateColumns: '200px 200px',
     },
   },
   city: {
-    border: `1px solid ${theme.palette.primary.main}`,
     backgroundColor: theme.palette.primary.light,
     height: 100,
+    opacity: 0.8,
+    '&:hover': {
+      opacity: 1,
+    },
   },
   showHistory: {
     height: '100%',
@@ -33,12 +36,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface SavedCities {
   citiesList: Array<string>;
 }
+const colormap = interpolate(['#CB3837', '#E7DDFF', '#009FFF', '#FFF5D8']);
 
 const SavedCities = ({ citiesList }: SavedCities) => {
   const styles = useStyles();
 
   const showList = citiesList.length < 8 ? citiesList : citiesList.slice(0, 7);
-  console.log(showList.length);
 
   return (
     <div className={styles.container}>
@@ -47,8 +50,14 @@ const SavedCities = ({ citiesList }: SavedCities) => {
       </Typography>
       <div className={styles.citiesList}>
         {showList.map((city: string, i: number) => {
+          const color = colormap(Math.random());
           return (
-            <Button variant="contained" key={city} className={styles.city}>
+            <Button
+              variant="contained"
+              key={city}
+              className={styles.city}
+              style={{ backgroundColor: color }}
+            >
               {city}
             </Button>
           );
