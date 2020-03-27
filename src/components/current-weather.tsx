@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography, Fab } from '@material-ui/core';
+import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 // TODO icons
@@ -31,21 +31,23 @@ const getDate = (lang: string) => {
   });
   return formatter.format(date);
 };
-interface CurrentWeatherType {
+interface CurrentWeatherProps {
   temperature: number | null;
   city: string | null;
   countryCode: string | null;
   weatherInfo: string | null;
   isMainPage: boolean;
+  handleAddCity: () => void;
 }
 
-const CurrentWeather = ({
+const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   temperature,
   city,
   countryCode,
   weatherInfo,
   isMainPage,
-}: CurrentWeatherType) => {
+  handleAddCity,
+}) => {
   const styles = useStyles();
   const date = getDate('en'); // TODO we can make language changing
 
@@ -63,9 +65,11 @@ const CurrentWeather = ({
           </Typography>
         </>
       ) : null}
-      <Fab color="primary" aria-label="add" className={styles.addCity}>
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Add place to history" aria-label="Add place to history">
+        <Fab color="primary" className={styles.addCity} onClick={handleAddCity}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
     </div>
   );
 };

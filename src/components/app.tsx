@@ -42,9 +42,9 @@ const App = () => {
   const [countryCode, setCountryCode] = useState('RU');
   const [currentTemperature, setCurrentTemperature] = useState(null);
   const [weatherDescription, setWeatherDescription] = useState('');
-  // const [citiesList]
-  const citiesList = localStorage.getItem(CITIES_LIST) || [];
-  console.log('citiesList: ', citiesList)
+  const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
+  const citiesList = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
+  console.log('citiesList: ', citiesList);
 
   useEffect(() => {
     getCoordinates().then((data) => {
@@ -64,7 +64,11 @@ const App = () => {
     });
   }, []);
 
-  // const citiesList = ['city0', 'city1', 'city2', 'city3', 'city4', 'city5', 'city6', 'city7'];
+  const handleAddCity = (): void => {
+    console.log('1) citiesList: ', citiesList);
+    citiesList.push(city);
+    console.log('2) citiesList: ', citiesList);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -85,9 +89,10 @@ const App = () => {
             countryCode={countryCode}
             isMainPage
             weatherInfo={weatherDescription}
+            handleAddCity={handleAddCity}
           />
         )}
-        <SavedCities citiesList={citiesList} />
+        {/* <SavedCities citiesList={citiesList} /> */}
         <Week />
       </div>
     </ThemeProvider>

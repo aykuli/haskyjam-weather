@@ -2,6 +2,7 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import interpolate from 'color-interpolate';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 // TODO сохраняем в историю id, координаты и название города. координаты - для поиска погоды потом точно, название города - для показа на панели. id - чтобы удалить потом из истории при необходимости.
 interface SavedCities {
-  citiesList: Array<string>;
+  citiesList: any;
 }
 const colormap = interpolate(['#CB3837', '#E7DDFF', '#009FFF', '#FFF5D8']);
 
@@ -48,24 +49,30 @@ const SavedCities = ({ citiesList }: SavedCities) => {
       <Typography variant="h2" component="h2">
         Saved Cities
       </Typography>
-      <div className={styles.citiesList}>
-        {showList.map((city: string, i: number) => {
-          const color = colormap(Math.random());
-          return (
-            <Button
-              variant="contained"
-              key={city}
-              className={styles.city}
-              style={{ backgroundColor: color }}
-            >
-              {city}
-            </Button>
-          );
-        })}
-        <Button variant="contained" className={styles.showHistory}>
-          Show all history
-        </Button>
-      </div>
+      {showList.length === 0 ? (
+        <Alert severity="info" variant="outlined">
+          Yout history is empty. You can add place clicking on Add button higher.
+        </Alert>
+      ) : (
+        <div className={styles.citiesList}>
+          {showList.map((city: string, i: number) => {
+            const color = colormap(Math.random());
+            return (
+              <Button
+                variant="contained"
+                key={city}
+                className={styles.city}
+                style={{ backgroundColor: color }}
+              >
+                {city}
+              </Button>
+            );
+          })}
+          <Button variant="contained" className={styles.showHistory}>
+            Show all history
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
