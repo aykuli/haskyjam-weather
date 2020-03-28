@@ -1,7 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+
+import { changeCurrentTab } from '../redux/actions';
 
 // TODO icons
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,40 +35,37 @@ const getDate = (lang: string) => {
   return formatter.format(date);
 };
 
-interface CurrentWeatherProps {
-  temperature: number | null;
-  city: string | null;
-  countryCode: string | null;
-  weatherInfo: string | null;
-  isMainPage: boolean;
-  handleAddCity: () => void;
+interface MapStateProps {
+  city: string;
+  country: string;
+  temperature: number;
+  weatherInfo: string;
 }
 
-const CurrentWeather: React.FC<CurrentWeatherProps> = ({
-  temperature,
-  city,
-  countryCode,
-  weatherInfo,
-  isMainPage,
-  handleAddCity,
-}) => {
+type Props = MapStateProps;
+
+const CurrentWeather = (props: Props) => {
+  const { temperature, city, country, weatherInfo } = props;
+
+  const handleAddCity = () => {
+    console.log('handleAddCity');
+  };
+
   const styles = useStyles();
   const date = getDate('en'); // TODO we can make language changing
 
   return (
     <div className={styles.main}>
       <Typography variant="h1" component="p">{`${temperature} °C`}</Typography>
-      <Typography variant="body1" component="p">{`${city}, ${countryCode}`}</Typography>
-      {isMainPage ? (
-        <>
-          <Typography variant="body1" component="p">
-            {date}
-          </Typography>
-          <Typography variant="body2" component="p">
-            {weatherInfo}
-          </Typography>
-        </>
-      ) : null}
+      <Typography variant="body1" component="p">{`${city}, ${country}`}</Typography>
+      <>
+        <Typography variant="body1" component="p">
+          {date}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {weatherInfo}
+        </Typography>
+      </>
       <Tooltip title="Add place to history" aria-label="Add place to history">
         <Fab color="primary" className={styles.addCity} onClick={handleAddCity}>
           <AddIcon />
@@ -75,4 +75,17 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   );
 };
 
-export default CurrentWeather;
+const mapStateToProps = ({ city, country, temperature, weatherInfo }: MapStateProps) => ({
+  city,
+  country,
+  temperature,
+  weatherInfo,
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    changeCurrentTab: (newTab: string) => dispatch(changeCurrentTab(newTab)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentWeather);

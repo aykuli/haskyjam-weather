@@ -9,7 +9,13 @@ import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
 import getRandomColor from '../services/color-generator';
-import { refreshCoordinates, changeCity, changeCountry } from '../redux/actions';
+import {
+  refreshCoordinates,
+  changeCity,
+  changeCountry,
+  changeWeatherInfo,
+  changeCurrentTemperature,
+} from '../redux/actions';
 
 // components
 import Navbar from './navbar';
@@ -24,6 +30,7 @@ import FAKE_HISTORY from '../services/fake-history';
 
 import { Coordinates } from '../types';
 
+// TODO round temparatures to 1number after comma
 const useStyles = makeStyles(() => ({
   container: {
     position: 'relative',
@@ -48,16 +55,22 @@ const useStyles = makeStyles(() => ({
 
 const ConnectedApp = (props: any) => {
   console.log('App props: ', props);
-  const { city, coordinates, currentTab, setCoordinates, setCity, setCountry } = props;
-  const isMainPage = currentTab === NAVBAR_BTNS[0];
+  const {
+    city,
+    temperature,
+    coordinates,
+    currentTab,
+    setCoordinates,
+    setCity,
+    setCountry,
+    setWeatherInfo,
+    setCurrentTemperature,
+  } = props;
+  // const isMainPage = currentTab === NAVBAR_BTNS[0];
 
   const styles = useStyles();
   const fakerator = Fakerator('en-EN');
 
-  // const [coordinates, setCoordinates1] = useState({ latitude: 0, longitude: 0 });
-  const [countryCode, setCountryCode] = useState<string>('RU');
-  const [currentTemperature, setCurrentTemperature] = useState(null);
-  const [weatherDescription, setWeatherDescription] = useState<string>('');
   const [weather48Hours, setWeather48Hours] = useState(null);
   const [weatherWeek, setWeatherWeek] = useState(null);
 
@@ -74,9 +87,6 @@ const ConnectedApp = (props: any) => {
       setCity(data.city);
       setCountry(data.country);
 
-      // old ones
-      setCountryCode(data.country);
-
       getWeather(latitude, longitude, 'en')
         .then((weather) => {
           console.log('weather: ', weather);
@@ -84,7 +94,7 @@ const ConnectedApp = (props: any) => {
           setWeatherWeek(weather.daily);
           setCurrentTemperature(weather.currently.temperature);
           const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
-          setWeatherDescription(txt);
+          setWeatherInfo(txt);
         })
         .catch((e) => {
           console.log('e: ', e);
@@ -92,22 +102,22 @@ const ConnectedApp = (props: any) => {
     });
   }, [citiesList]);
 
-  const handleAddCity = (): void => {
-    const id = fakerator.random.masked('aaa-AAA_999999:*');
-    const color = getRandomColor();
-    const newCitiesList = [
-      {
-        color,
-        id,
-        city,
-        coordinates,
-      },
-      ...citiesList,
-    ];
-    setCitiesList(newCitiesList);
-    localStorage.removeItem(CITIES_LIST);
-    localStorage.setItem(CITIES_LIST, JSON.stringify(newCitiesList));
-  };
+  // const handleAddCity = (): void => {
+  //   const id = fakerator.random.masked('aaa-AAA_999999:*');
+  //   const color = getRandomColor();
+  //   const newCitiesList = [
+  //     {
+  //       color,
+  //       id,
+  //       city,
+  //       coordinates,
+  //     },
+  //     ...citiesList,
+  //   ];
+  //   setCitiesList(newCitiesList);
+  //   localStorage.removeItem(CITIES_LIST);
+  //   localStorage.setItem(CITIES_LIST, JSON.stringify(newCitiesList));
+  // };
 
   const handleClearHistory = (): void => {
     localStorage.removeItem(CITIES_LIST);
@@ -143,7 +153,7 @@ const ConnectedApp = (props: any) => {
       <CssBaseline />
       <div className={styles.container}>
         <Navbar />
-        {currentTemperature === null ? (
+        {temperature === null ? (
           <div className={styles.sceleton}>
             <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />
             <Skeleton variant="text" width={50} height={70} />
@@ -151,14 +161,7 @@ const ConnectedApp = (props: any) => {
             <Skeleton variant="rect" width={300} height={118} />
           </div>
         ) : (
-          <CurrentWeather
-            temperature={currentTemperature}
-            city={city}
-            countryCode={countryCode}
-            isMainPage={isMainPage}
-            weatherInfo={weatherDescription}
-            handleAddCity={handleAddCity}
-          />
+          <CurrentWeather />
         )}
         {componentMaps.get(currentTab)}
       </div>
@@ -190,9 +193,11 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setCoordinates: (data: any) => dispatch(refreshCoordinates(data)),
-    setCity: (str: any) => dispatch(changeCity(str)),
-    setCountry: (str: any) => dispatch(changeCountry(str)),
+    setCoordinates: (data: Coordinates) => dispatch(refreshCoordinates(data)),
+    setCity: (str: string) => dispatch(changeCity(str)),
+    setCountry: (str: string) => dispatch(changeCountry(str)),
+    setWeatherInfo: (str: string) => dispatch(changeWeatherInfo(str)),
+    setCurrentTemperature: (numb: number) => dispatch(changeCurrentTemperature(numb)),
   };
 };
 
@@ -201,3 +206,4 @@ const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
 export default App;
 
 // TODO env-cmd разобраться что за модуль
+// TODO App ConnectedApp поменять местами
