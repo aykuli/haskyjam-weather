@@ -17,8 +17,8 @@ import Map from './map';
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
+    alignItems: 'flex-end',
     padding: 40,
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center',
@@ -31,7 +31,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   info: {
-    // border: '1px solid red',
+    width: 400,
+    marginRight: 20,
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 40,
+      marginRight: 0,
+    },
   },
   table: {
     minWidth: 250,
