@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import Fakerator from 'fakerator';
 
 import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
-import getRandomColor from '../services/color-generator';
 import {
   refreshCoordinates,
   changeCity,
@@ -54,7 +52,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ConnectedApp = (props: any) => {
-  console.log('App props: ', props);
   const {
     city,
     temperature,
@@ -69,7 +66,6 @@ const ConnectedApp = (props: any) => {
   // const isMainPage = currentTab === NAVBAR_BTNS[0];
 
   const styles = useStyles();
-  const fakerator = Fakerator('en-EN');
 
   const [weather48Hours, setWeather48Hours] = useState(null);
   const [weatherWeek, setWeatherWeek] = useState(null);
@@ -101,23 +97,6 @@ const ConnectedApp = (props: any) => {
         });
     });
   }, [citiesList]);
-
-  // const handleAddCity = (): void => {
-  //   const id = fakerator.random.masked('aaa-AAA_999999:*');
-  //   const color = getRandomColor();
-  //   const newCitiesList = [
-  //     {
-  //       color,
-  //       id,
-  //       city,
-  //       coordinates,
-  //     },
-  //     ...citiesList,
-  //   ];
-  //   setCitiesList(newCitiesList);
-  //   localStorage.removeItem(CITIES_LIST);
-  //   localStorage.setItem(CITIES_LIST, JSON.stringify(newCitiesList));
-  // };
 
   const handleClearHistory = (): void => {
     localStorage.removeItem(CITIES_LIST);

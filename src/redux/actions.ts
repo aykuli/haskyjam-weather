@@ -5,6 +5,7 @@ import {
   CHANGE_COUNTRY,
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
+  ADD_CITY_TO_HISTORY,
 } from './action-types';
 
 export interface StringType {
@@ -73,5 +74,13 @@ export const changeCurrentTemperature = (temperature: number): TemperatureProps 
   return {
     type: CHANGE_CURRENT_TEMPERATURE,
     temperature,
+  };
+};
+
+export const addCityToHistory = (history: any): any => {
+  console.log('changeHistory action: ', history);
+  return {
+    type: ADD_CITY_TO_HISTORY,
+    history,
   };
 };

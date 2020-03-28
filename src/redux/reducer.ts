@@ -5,8 +5,12 @@ import {
   CHANGE_COUNTRY,
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
+  ADD_CITY_TO_HISTORY,
 } from './action-types';
-import { NAVBAR_BTNS } from '../constantas/common';
+import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
+
+const ls = localStorage.getItem(CITIES_LIST);
+const history = ls === null ? [] : JSON.parse(ls);
 
 const initialState = {
   currentTab: NAVBAR_BTNS[0],
@@ -20,6 +24,7 @@ const initialState = {
   weatherInfo: '',
   weather48Hours: {},
   weatherWeek: {},
+  history,
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -55,6 +60,11 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         temperature: action.temperature,
+      };
+    case ADD_CITY_TO_HISTORY:
+      return {
+        ...state,
+        history: [...state.history, action.history],
       };
     default:
       return state;
