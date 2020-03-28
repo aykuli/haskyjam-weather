@@ -9,7 +9,7 @@ import {
   CHANGE_WEATHER_FOR_NEXT_48_HOURS,
   CHANGE_WEEK_WEATHER,
 } from './action-types';
-import { HistoryItem, Weather48HoursProp } from '../types';
+import { HistoryItem, Weather48HoursProp, WeatherWeekProp } from '../types';
 
 interface CurrentTabProps {
   type: string;
@@ -105,7 +105,7 @@ export const changeWeatherForNext48Hours = (weather48Hours: Weather48HoursProp):
   };
 };
 
-export const changeWeatherWeek = (weatherWeek: any): WeekWeatherProps => {
+export const changeWeatherWeek = (weatherWeek: WeatherWeekProp): WeekWeatherProps => {
   return {
     type: CHANGE_WEEK_WEATHER,
     weatherWeek,

@@ -133,10 +133,6 @@ const DayWeather = (props: Props) => {
   );
 };
 
-// const mapStateToProps = ({ coordinates, weather48Hours }: MapStateProps) => ({
-//   coordinates,
-//   weather48Hours,
-// });
 const mapStateToProps = (state: RootStateOrAny) => ({
   coordinates: state.coordinates,
   weather48Hours: state.weather48Hours,

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 
+import { WeatherWeekProp } from '../types';
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     padding: '10px 40px 40px',
@@ -22,8 +24,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface WeekInfo {
-  data: any; // TODO check all any types
+interface WeekProp {
+  weatherWeek: WeatherWeekProp; // TODO check all any types
 }
 // TODO icons
 
@@ -90,7 +92,7 @@ const Week = (props: any) => {
 };
 
 interface MapStateProps {
-  weatherWeek: any;
+  weatherWeek: WeatherWeekProp;
 }
 
 const mapStateToProps = ({ weatherWeek }: MapStateProps) => ({
