@@ -16,6 +16,7 @@ import {
 import Map from './map';
 
 import { NAVBAR_BTNS } from '../constantas/common';
+import { Weather48HoursProp } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface MapStateProps {
   coordinates: Coordinates;
-  weather48Hours: any;
+  weather48Hours: Weather48HoursProp;
 }
 
 interface OwnProps {
@@ -136,4 +137,4 @@ const mapStateToProps = ({ coordinates, weather48Hours }: MapStateProps) => ({
   weather48Hours,
 });
 
-export default connect(mapStateToProps, null)(DayWeather);
+export default connect<MapStateProps, OwnProps>(mapStateToProps, null)(DayWeather);

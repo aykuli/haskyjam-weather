@@ -67,7 +67,6 @@ const App = (props: any) => {
 
   const styles = useStyles();
 
-  // const [weather48Hours, setWeather48Hours] = useState(null);
   const [weatherWeek, setWeatherWeek] = useState(null);
 
   const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
@@ -85,9 +84,8 @@ const App = (props: any) => {
 
       getWeather(latitude, longitude, 'en')
         .then((weather) => {
-          console.log('weather: ', weather);
+          console.log('weather: ', weather.hourly);
           setWeather48hours(weather.hourly);
-          // setWeather48Hours(weather.hourly);
           setWeatherWeek(weather.daily);
           setCurrentTemperature(weather.currently.temperature);
           const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
@@ -118,8 +116,8 @@ const App = (props: any) => {
       handleDeleteCity={handleDeleteCity}
     />
   );
-  componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
-  componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
+  // componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
+  // componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
   componentMaps.set(NAVBAR_BTNS[3], <Week data={weatherWeek} />);
 
   return (
