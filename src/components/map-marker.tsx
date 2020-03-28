@@ -7,14 +7,14 @@ import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme: Theme) => ({
   marker: {
     transform: 'translate(0, 0)',
-    color: theme.palette.primary.main,
+    // color: theme.palette.primary.main,
   },
   user: {
     position: 'relative',
     cursor: 'pointer',
     outline: 'none',
     '& svg': {
-      fill: theme.palette.primary.dark,
+      fill: theme.palette.error.dark,
     },
   },
   popup: {
@@ -75,13 +75,8 @@ const MapMarker: React.FC<MarkerProps> = ({
           className={styles.popup}
         >
           <div>
-            <Typography variant="body1">
-              city:
-              
-            </Typography>
-            <Typography variant="body1">
-              country:
-            </Typography>
+            <Typography variant="body1">city:</Typography>
+            <Typography variant="body1">country:</Typography>
           </div>
         </Popup>
       )}

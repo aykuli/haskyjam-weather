@@ -11,3 +11,4 @@
 | 8 | https://stackoverflow.com/questions/9444745/javascript-how-to-get-tomorrows-date-in-format-dd-mm-yy | tomorrow day ||
 | 9 | https://stackoverflow.com/questions/1025693/how-to-get-next-week-date-in-javascript | day after week | |
 | 10 | https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString | Data workflow | |
+| 11 | https://www.mydatahack.com/getting-redux-devtools-to-work-with-typescript/ | CHROME_DEVTOOLS with Typescrit | |

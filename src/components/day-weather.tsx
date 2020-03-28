@@ -47,8 +47,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   headRow: {
-    borderBottom: `1px solid ${theme.palette.primary.main}`,
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
+  },
+  tableHeader: {
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -87,10 +89,10 @@ const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
           <Table className={styles.table} size="small" aria-label={`${title} weather`}>
             <TableHead>
               <TableRow className={styles.headRow}>
-                <TableCell>Time</TableCell>
-                <TableCell>Temperature</TableCell>
-                <TableCell>Summary</TableCell>
-                <TableCell>Wind</TableCell>
+                <TableCell className={styles.tableHeader}>Time</TableCell>
+                <TableCell className={styles.tableHeader}>Temperature</TableCell>
+                <TableCell className={styles.tableHeader}>Summary</TableCell>
+                <TableCell className={styles.tableHeader}>Wind</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
