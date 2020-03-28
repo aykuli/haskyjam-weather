@@ -1,7 +1,18 @@
-import REFRESH_DATA from './constantas/action-types';
+import { REFRESH_COORDINATES, CHANGE_CURRENT_TAB } from './action-types';
 
-const refreshData = payload => {
-  return { type: REFRESH_DATA, payload };
+export interface StringType {
+  tab: string;
+}
+
+export interface CurrentTabProps {
+  type: string;
+  currentTab: string;
+}
+export const refreshCoordinates = ({ latitude, longitude }: any) => {
+  return { type: REFRESH_COORDINATES, coordinates: { latitude, longitude } };
 };
 
-export default refreshData;
+export const changeCurrentTab = ({ tab }: StringType): CurrentTabProps => ({
+  type: CHANGE_CURRENT_TAB,
+  currentTab: tab,
+});

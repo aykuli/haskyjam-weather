@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,20 +9,20 @@ import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
 import getRandomColor from '../services/color-generator';
+import { refreshCoordinates } from '../redux/actions';
 
+// components
 import Navbar from './navbar';
 import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
 import DayWeather from './day-weather';
 
-import { CITIES_LIST } from '../constantas/common';
+// contantas
+import { CITIES_LIST, NAVBAR_BTNS } from '../constantas/common';
 import FAKE_HISTORY from '../services/fake-history';
 
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
+import { Coordinates } from '../types';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -45,11 +46,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const App = () => {
+const ConnectedApp = (props: any) => {
+  console.log('App props: ', props);
+  const { currentTab, setCoordinates } = props;
+  const isMainPage = currentTab === NAVBAR_BTNS[0];
+  
   const styles = useStyles();
   const fakerator = Fakerator('en-EN');
 
-  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+  const [coordinates, setCoordinates1] = useState({ latitude: 0, longitude: 0 });
   const [city, setCity] = useState<string>('Moscow');
   const [countryCode, setCountryCode] = useState<string>('RU');
   const [currentTemperature, setCurrentTemperature] = useState(null);
@@ -64,11 +69,14 @@ const App = () => {
   useEffect(() => {
     getCoordinates().then((data) => {
       console.log('data: ', data);
-      setCoordinates({ latitude: data.latitude, longitude: data.longitude });
+      const { latitude, longitude } = data;
+
+      setCoordinates({ latitude, longitude });
+      setCoordinates1({ latitude, longitude });
       setCity(data.city);
       setCountryCode(data.country);
 
-      getWeather(data.latitude, data.longitude, 'en')
+      getWeather(latitude, longitude, 'en')
         .then((weather) => {
           console.log('weather: ', weather);
           setWeather48Hours(weather.hourly);
@@ -110,11 +118,24 @@ const App = () => {
     setCitiesList(newCitiesList);
   };
 
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  });
+  const componentMaps = new Map();
+  componentMaps.set(
+    NAVBAR_BTNS[0],
+    <SavedCities
+      citiesList={citiesList}
+      handleClearHistory={handleClearHistory}
+      handleDeleteCity={handleDeleteCity}
+    />
+  );
+  componentMaps.set(
+    NAVBAR_BTNS[1],
+    <DayWeather title={NAVBAR_BTNS[1]} data={weather48Hours} coordinates={coordinates} />
+  );
+  componentMaps.set(
+    NAVBAR_BTNS[2],
+    <DayWeather title={NAVBAR_BTNS[2]} data={weather48Hours} coordinates={coordinates} />
+  );
+  componentMaps.set(NAVBAR_BTNS[3], <Week data={weatherWeek} />);
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,25 +154,47 @@ const App = () => {
             temperature={currentTemperature}
             city={city}
             countryCode={countryCode}
-            isMainPage
+            isMainPage={isMainPage}
             weatherInfo={weatherDescription}
             handleAddCity={handleAddCity}
           />
         )}
-        {/* <SavedCities
-          citiesList={citiesList}
-          handleClearHistory={handleClearHistory}
-          handleDeleteCity={handleDeleteCity}
-        /> */}
-        {/* <Week data={weatherWeek} /> */}
-        <DayWeather title="Today" data={weather48Hours} coordinates={coordinates} />
-        {/* <DayWeather title="Tomorrow" data={weather48Hours} coordinates={coordinates} /> */}
+        {componentMaps.get(currentTab)}
       </div>
     </ThemeProvider>
   );
 };
 
+interface MapStateProps {
+  currentTab: string;
+  coordinates: Coordinates;
+  city: string;
+  country: string;
+  temperature: number;
+}
+
+const mapStateToProps = ({
+  currentTab,
+  coordinates,
+  city,
+  country,
+  temperature,
+}: MapStateProps) => ({
+  currentTab,
+  coordinates,
+  city,
+  country,
+  temperature,
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setCoordinates: (data: any) => dispatch(refreshCoordinates(data)),
+  };
+};
+
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
+
 export default App;
 
 // TODO env-cmd разобраться что за модуль
-// TODO typescript in devDependencies

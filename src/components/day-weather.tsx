@@ -14,6 +14,8 @@ import {
 
 import Map from './map';
 
+import { NAVBAR_BTNS } from '../constantas/common';
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
@@ -68,7 +70,7 @@ interface DayInfo {
 const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
   const styles = useStyles();
   const today = new Date();
-  const day = title === 'Today' ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
+  const day = title === NAVBAR_BTNS[1] ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
   const level = day.getDate();
   const date = day.toLocaleDateString('en-US', {
     weekday: 'long',

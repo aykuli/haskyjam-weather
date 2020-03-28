@@ -1,10 +1,13 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
+import { connect } from 'react-redux';
 import { InputBase, ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
 
 import { NAVBAR_BTNS } from '../constantas/common';
+
+import { changeCurrentTab as changeTab, StringType } from '../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,8 +75,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Navbar = () => {
-  const [currentTab, setCurrentTab] = React.useState('TODAY');
+const ConnectedNavbar = (props: any) => {
+  const { changeCurrentTab, currentTab } = props;
 
   const styles = useStyles();
 
@@ -81,7 +84,7 @@ const Navbar = () => {
     e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
   ) => {
     const { innerText } = e.target as HTMLButtonElement;
-    setCurrentTab(innerText);
+    changeCurrentTab({ tab: innerText });
   };
 
   return (
@@ -120,5 +123,14 @@ const Navbar = () => {
     </div>
   );
 };
+const mapStateToProps = ({ currentTab }: any) => ({ currentTab });
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    changeCurrentTab: (tab: StringType) => dispatch(changeTab(tab)),
+  };
+};
+
+const Navbar = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavbar);
 
 export default Navbar;

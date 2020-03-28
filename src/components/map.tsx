@@ -62,8 +62,6 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ latitude, longitude, place }) => {
-  console.log(latitude);
-  console.log(longitude);
   const styles = useStyles();
   const [viewport, setViewport] = useState({
     width: 650,
