@@ -9,7 +9,7 @@ import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
 import getRandomColor from '../services/color-generator';
-import { refreshCoordinates } from '../redux/actions';
+import { refreshCoordinates, changeCity } from '../redux/actions';
 
 // components
 import Navbar from './navbar';
@@ -48,14 +48,13 @@ const useStyles = makeStyles(() => ({
 
 const ConnectedApp = (props: any) => {
   console.log('App props: ', props);
-  const { currentTab, setCoordinates } = props;
+  const { city, coordinates, currentTab, setCoordinates, setCity } = props;
   const isMainPage = currentTab === NAVBAR_BTNS[0];
-  
+
   const styles = useStyles();
   const fakerator = Fakerator('en-EN');
 
-  const [coordinates, setCoordinates1] = useState({ latitude: 0, longitude: 0 });
-  const [city, setCity] = useState<string>('Moscow');
+  // const [coordinates, setCoordinates1] = useState({ latitude: 0, longitude: 0 });
   const [countryCode, setCountryCode] = useState<string>('RU');
   const [currentTemperature, setCurrentTemperature] = useState(null);
   const [weatherDescription, setWeatherDescription] = useState<string>('');
@@ -72,8 +71,9 @@ const ConnectedApp = (props: any) => {
       const { latitude, longitude } = data;
 
       setCoordinates({ latitude, longitude });
-      setCoordinates1({ latitude, longitude });
       setCity(data.city);
+
+      // old ones
       setCountryCode(data.country);
 
       getWeather(latitude, longitude, 'en')
@@ -190,6 +190,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setCoordinates: (data: any) => dispatch(refreshCoordinates(data)),
+    setCity: (str: any) => dispatch(changeCity(str)),
   };
 };
 
