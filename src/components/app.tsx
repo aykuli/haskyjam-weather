@@ -9,7 +9,7 @@ import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeather from '../services/get-weather';
 import getRandomColor from '../services/color-generator';
-import { refreshCoordinates, changeCity } from '../redux/actions';
+import { refreshCoordinates, changeCity, changeCountry } from '../redux/actions';
 
 // components
 import Navbar from './navbar';
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
 
 const ConnectedApp = (props: any) => {
   console.log('App props: ', props);
-  const { city, coordinates, currentTab, setCoordinates, setCity } = props;
+  const { city, coordinates, currentTab, setCoordinates, setCity, setCountry } = props;
   const isMainPage = currentTab === NAVBAR_BTNS[0];
 
   const styles = useStyles();
@@ -72,6 +72,7 @@ const ConnectedApp = (props: any) => {
 
       setCoordinates({ latitude, longitude });
       setCity(data.city);
+      setCountry(data.country);
 
       // old ones
       setCountryCode(data.country);
@@ -191,6 +192,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setCoordinates: (data: any) => dispatch(refreshCoordinates(data)),
     setCity: (str: any) => dispatch(changeCity(str)),
+    setCountry: (str: any) => dispatch(changeCountry(str)),
   };
 };
 

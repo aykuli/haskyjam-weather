@@ -1,4 +1,9 @@
-import { REFRESH_COORDINATES, CHANGE_CURRENT_TAB, CHANGE_CITY } from './action-types';
+import {
+  REFRESH_COORDINATES,
+  CHANGE_CURRENT_TAB,
+  CHANGE_CITY,
+  CHANGE_COUNTRY,
+} from './action-types';
 import { NAVBAR_BTNS } from '../constantas/common';
 
 const initialState = {
@@ -32,6 +37,11 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         city: action.city,
+      };
+    case CHANGE_COUNTRY:
+      return {
+        ...state,
+        country: action.country,
       };
     default:
       return state;

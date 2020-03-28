@@ -7,7 +7,7 @@ import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles'
 
 import { NAVBAR_BTNS } from '../constantas/common';
 
-import { changeCurrentTab as changeTab, StringType } from '../redux/actions';
+import { changeCurrentTab as changeTab } from '../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,7 +84,7 @@ const ConnectedNavbar = (props: any) => {
     e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
   ) => {
     const { innerText } = e.target as HTMLButtonElement;
-    changeCurrentTab({ tab: innerText });
+    changeCurrentTab(innerText);
   };
 
   return (
@@ -127,7 +127,7 @@ const mapStateToProps = ({ currentTab }: any) => ({ currentTab });
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    changeCurrentTab: (tab: StringType) => dispatch(changeTab(tab)),
+    changeCurrentTab: (newTab: string) => dispatch(changeTab(newTab)),
   };
 };
 
