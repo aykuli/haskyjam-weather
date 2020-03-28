@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, RootStateOrAny } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Typography,
@@ -16,7 +16,8 @@ import {
 import Map from './map';
 
 import { NAVBAR_BTNS } from '../constantas/common';
-import { Weather48HoursProp } from '../types';
+import { Weather48HoursProp, HistoryItem } from '../types';
+import { addCityToHistory } from '../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -132,9 +133,24 @@ const DayWeather = (props: Props) => {
   );
 };
 
-const mapStateToProps = ({ coordinates, weather48Hours }: MapStateProps) => ({
-  coordinates,
-  weather48Hours,
+// const mapStateToProps = ({ coordinates, weather48Hours }: MapStateProps) => ({
+//   coordinates,
+//   weather48Hours,
+// });
+const mapStateToProps = (state: RootStateOrAny) => ({
+  coordinates: state.coordinates,
+  weather48Hours: state.weather48Hours,
 });
 
-export default connect<MapStateProps, OwnProps>(mapStateToProps, null)(DayWeather);
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
+};
+
+export default connect<MapStateProps, DispatchProps, OwnProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(DayWeather);
