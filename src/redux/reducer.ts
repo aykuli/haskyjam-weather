@@ -9,11 +9,12 @@ import {
   CHANGE_WEATHER_FOR_NEXT_48_HOURS,
 } from './action-types';
 import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
+import { StoreType } from '../types';
 
 const ls = localStorage.getItem(CITIES_LIST);
 const history = ls === null ? [] : JSON.parse(ls);
 
-const initialState = {
+const initialState: StoreType = {
   currentTab: NAVBAR_BTNS[0],
   coordinates: {
     latitude: 0,
