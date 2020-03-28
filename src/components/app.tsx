@@ -13,7 +13,8 @@ import {
   changeCountry,
   changeWeatherInfo,
   changeCurrentTemperature,
-  CheangeWeatherForNext48Hours,
+  changeWeatherForNext48Hours,
+  changeWeatherWeek,
 } from '../redux/actions';
 
 // components
@@ -62,15 +63,12 @@ const App = (props: any) => {
     setWeatherInfo,
     setCurrentTemperature,
     setWeather48hours,
+    setWeatherWeek,
   } = props;
   // const isMainPage = currentTab === NAVBAR_BTNS[0];
 
   const styles = useStyles();
 
-  const [weatherWeek, setWeatherWeek] = useState(null);
-
-  const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
-  const list = dataFromLocalStorage === null ? [] : JSON.parse(dataFromLocalStorage);
   const [citiesList, setCitiesList] = useState(FAKE_HISTORY); // TODO remove FAKE and place list
 
   useEffect(() => {
@@ -116,9 +114,9 @@ const App = (props: any) => {
       handleDeleteCity={handleDeleteCity}
     />
   );
-  // componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
-  // componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
-  componentMaps.set(NAVBAR_BTNS[3], <Week data={weatherWeek} />);
+  componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
+  componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
+  componentMaps.set(NAVBAR_BTNS[3], <Week />);
 
   return (
     <ThemeProvider theme={theme}>
@@ -155,6 +153,18 @@ const mapStateToProps = ({ currentTab, country, temperature }: MapStateProps) =>
   temperature,
 });
 
+// const mapDispatchToProps = (dispatch: any) => {
+//   return {
+//     setCoordinates: (data: Coordinates) => dispatch(refreshCoordinates(data)),
+//     setCity: (str: string) => dispatch(changeCity(str)),
+//     setCountry: (str: string) => dispatch(changeCountry(str)),
+//     setWeatherInfo: (str: string) => dispatch(changeWeatherInfo(str)),
+//     setCurrentTemperature: (numb: number) => dispatch(changeCurrentTemperature(numb)),
+//     setWeather48hours: (data: any) => dispatch(changeWeatherForNext48Hours(data)),
+//     setWeekWeather: (data: any) => dispatch(changeWeekWeather(data)),
+//   };
+// };
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setCoordinates: (data: Coordinates) => dispatch(refreshCoordinates(data)),
@@ -162,9 +172,11 @@ const mapDispatchToProps = (dispatch: any) => {
     setCountry: (str: string) => dispatch(changeCountry(str)),
     setWeatherInfo: (str: string) => dispatch(changeWeatherInfo(str)),
     setCurrentTemperature: (numb: number) => dispatch(changeCurrentTemperature(numb)),
-    setWeather48hours: (data: any) => dispatch(CheangeWeatherForNext48Hours(data)),
+    setWeather48hours: (data: any) => dispatch(changeWeatherForNext48Hours(data)),
+    setWeatherWeek: (data: any) => dispatch(changeWeatherWeek(data)),
   };
 };
+// TODO refactor here
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 

@@ -7,6 +7,7 @@ import {
   CHANGE_CURRENT_TEMPERATURE,
   ADD_CITY_TO_HISTORY,
   CHANGE_WEATHER_FOR_NEXT_48_HOURS,
+  CHANGE_WEEK_WEATHER,
 } from './action-types';
 import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
 import { StoreType } from '../types';
@@ -25,7 +26,7 @@ const initialState: StoreType = {
   temperature: null,
   weatherInfo: '',
   weather48Hours: null,
-  weatherWeek: {},
+  weatherWeek: null,
   history,
 };
 
@@ -72,6 +73,11 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         weather48Hours: action.weather48Hours,
+      };
+    case CHANGE_WEEK_WEATHER:
+      return {
+        ...state,
+        weatherWeek: action.weatherWeek,
       };
     default:
       return state;
