@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Typography,
@@ -56,18 +57,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
-interface DayInfo {
-  title: string;
-  data: any;
+interface MapStateProps {
   coordinates: Coordinates;
+  weather48Hours: any;
 }
 
-const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
+interface OwnProps {
+  title: string;
+}
+
+type Props = MapStateProps & OwnProps;
+
+const DayWeather = (props: Props) => {
+  const { title, weather48Hours, coordinates } = props;
   const styles = useStyles();
   const today = new Date();
   const day = title === NAVBAR_BTNS[1] ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
@@ -98,8 +100,8 @@ const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data
-                ? data.data.map((item: any) => {
+              {weather48Hours
+                ? weather48Hours.data.map((item: any) => {
                     const { time, temperature, summary, windSpeed } = item;
                     const timeConverted = new Date(time * 1000);
                     const hoursView = (hour: number) => (hour < 10 ? `0${hour}` : hour);
@@ -129,4 +131,9 @@ const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
   );
 };
 
-export default DayWeather;
+const mapStateToProps = ({ coordinates, weather48Hours }: MapStateProps) => ({
+  coordinates,
+  weather48Hours,
+});
+
+export default connect(mapStateToProps, null)(DayWeather);

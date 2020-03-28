@@ -6,7 +6,9 @@ import {
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
   ADD_CITY_TO_HISTORY,
+  CHANGE_WEATHER_FOR_NEXT_48_HOURS,
 } from './action-types';
+import { HistoryItem } from '../types';
 
 export interface StringType {
   str: string;
@@ -35,6 +37,11 @@ export interface WeatherInfoProps {
 export interface TemperatureProps {
   type: string;
   temperature: number;
+}
+
+export interface HistoryProps {
+  type: string;
+  history: HistoryItem;
 }
 
 export const refreshCoordinates = ({ latitude, longitude }: any) => {
@@ -77,10 +84,16 @@ export const changeCurrentTemperature = (temperature: number): TemperatureProps 
   };
 };
 
-export const addCityToHistory = (history: any): any => {
-  console.log('changeHistory action: ', history);
+export const addCityToHistory = (history: HistoryItem): HistoryProps => {
   return {
     type: ADD_CITY_TO_HISTORY,
     history,
+  };
+};
+
+export const CheangeWeatherForNext48Hours = (weather48Hours: any): any => {
+  return {
+    type: CHANGE_WEATHER_FOR_NEXT_48_HOURS,
+    weather48Hours,
   };
 };

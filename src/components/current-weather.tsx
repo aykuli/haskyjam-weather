@@ -44,7 +44,6 @@ interface MapStateProps {
   temperature: number;
   weatherInfo: string;
   coordinates: Coordinates;
-  history: HistoryItem;
 }
 
 interface MapDispatchProps {
@@ -54,40 +53,19 @@ interface MapDispatchProps {
 type Props = MapStateProps & MapDispatchProps;
 
 const CurrentWeather = (props: Props) => {
-  const {
-    temperature,
-    city,
-    country,
-    weatherInfo,
-    coordinates,
-    history,
-    setNewCityToHistory,
-  } = props;
+  const { temperature, city, country, weatherInfo, coordinates, setNewCityToHistory } = props;
 
   const fakerator = Fakerator('en-EN');
 
   const handleAddCity = () => {
-    console.log('handleAddCity');
     const id = fakerator.random.masked('aaa-AAA_999999:*');
     const color = getRandomColor();
-    // const newHistory = [
-    //   {
-    //     color,
-    //     id,
-    //     city,
-    //     coordinates,
-    //   },
-    //   ...history,
-    // ];
     setNewCityToHistory({
       color,
       id,
       city,
       coordinates,
     });
-    // setCitiesList(newCitiesList);
-    // localStorage.removeItem(CITIES_LIST);
-    // localStorage.setItem(CITIES_LIST, JSON.stringify(newCitiesList));
   };
 
   const styles = useStyles();
@@ -120,14 +98,12 @@ const mapStateToProps = ({
   temperature,
   weatherInfo,
   coordinates,
-  history,
 }: MapStateProps) => ({
   city,
   country,
   temperature,
   weatherInfo,
   coordinates,
-  history,
 });
 
 const mapDispatchToProps = (dispatch: any) => {

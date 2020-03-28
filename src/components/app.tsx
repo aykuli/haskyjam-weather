@@ -13,6 +13,7 @@ import {
   changeCountry,
   changeWeatherInfo,
   changeCurrentTemperature,
+  CheangeWeatherForNext48Hours,
 } from '../redux/actions';
 
 // components
@@ -51,23 +52,22 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ConnectedApp = (props: any) => {
+const App = (props: any) => {
   const {
-    city,
     temperature,
-    coordinates,
     currentTab,
     setCoordinates,
     setCity,
     setCountry,
     setWeatherInfo,
     setCurrentTemperature,
+    setWeather48hours,
   } = props;
   // const isMainPage = currentTab === NAVBAR_BTNS[0];
 
   const styles = useStyles();
 
-  const [weather48Hours, setWeather48Hours] = useState(null);
+  // const [weather48Hours, setWeather48Hours] = useState(null);
   const [weatherWeek, setWeatherWeek] = useState(null);
 
   const dataFromLocalStorage = localStorage.getItem(CITIES_LIST);
@@ -86,7 +86,8 @@ const ConnectedApp = (props: any) => {
       getWeather(latitude, longitude, 'en')
         .then((weather) => {
           console.log('weather: ', weather);
-          setWeather48Hours(weather.hourly);
+          setWeather48hours(weather.hourly);
+          // setWeather48Hours(weather.hourly);
           setWeatherWeek(weather.daily);
           setCurrentTemperature(weather.currently.temperature);
           const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
@@ -117,14 +118,8 @@ const ConnectedApp = (props: any) => {
       handleDeleteCity={handleDeleteCity}
     />
   );
-  componentMaps.set(
-    NAVBAR_BTNS[1],
-    <DayWeather title={NAVBAR_BTNS[1]} data={weather48Hours} coordinates={coordinates} />
-  );
-  componentMaps.set(
-    NAVBAR_BTNS[2],
-    <DayWeather title={NAVBAR_BTNS[2]} data={weather48Hours} coordinates={coordinates} />
-  );
+  componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
+  componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
   componentMaps.set(NAVBAR_BTNS[3], <Week data={weatherWeek} />);
 
   return (
@@ -156,16 +151,8 @@ interface MapStateProps {
   temperature: number;
 }
 
-const mapStateToProps = ({
+const mapStateToProps = ({ currentTab, country, temperature }: MapStateProps) => ({
   currentTab,
-  coordinates,
-  city,
-  country,
-  temperature,
-}: MapStateProps) => ({
-  currentTab,
-  coordinates,
-  city,
   country,
   temperature,
 });
@@ -177,12 +164,11 @@ const mapDispatchToProps = (dispatch: any) => {
     setCountry: (str: string) => dispatch(changeCountry(str)),
     setWeatherInfo: (str: string) => dispatch(changeWeatherInfo(str)),
     setCurrentTemperature: (numb: number) => dispatch(changeCurrentTemperature(numb)),
+    setWeather48hours: (data: any) => dispatch(CheangeWeatherForNext48Hours(data)),
   };
 };
 
-const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
-
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 // TODO env-cmd разобраться что за модуль
 // TODO App ConnectedApp поменять местами
