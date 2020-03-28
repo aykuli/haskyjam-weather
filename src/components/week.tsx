@@ -29,7 +29,6 @@ interface WeekInfo {
 const Week: React.FC<WeekInfo> = ({ data }) => {
   const styles = useStyles();
 
-  console.log('week data: ', data);
   const today = new Date();
   const firstDay = new Date(today.getTime() + 24 * 60 * 60 * 1000);
   const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -53,7 +52,6 @@ const Week: React.FC<WeekInfo> = ({ data }) => {
     }
   }
 
-  console.log('week: ', week);
   return (
     <div className={styles.container}>
       <Typography variant="h2" component="h2">

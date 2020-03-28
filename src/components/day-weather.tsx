@@ -14,11 +14,13 @@ import {
 
 import Map from './map';
 
+import { NAVBAR_BTNS } from '../constantas/common';
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
+    alignItems: 'flex-end',
     padding: 40,
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center',
@@ -31,7 +33,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   info: {
-    // border: '1px solid red',
+    width: 400,
+    marginRight: 20,
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 40,
+      marginRight: 0,
+    },
   },
   table: {
     minWidth: 250,
@@ -42,8 +49,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   headRow: {
-    borderBottom: `1px solid ${theme.palette.primary.main}`,
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
+  },
+  tableHeader: {
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -61,7 +70,7 @@ interface DayInfo {
 const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
   const styles = useStyles();
   const today = new Date();
-  const day = title === 'Today' ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
+  const day = title === NAVBAR_BTNS[1] ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
   const level = day.getDate();
   const date = day.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -82,10 +91,10 @@ const DayWeather: React.FC<DayInfo> = ({ title, data, coordinates }) => {
           <Table className={styles.table} size="small" aria-label={`${title} weather`}>
             <TableHead>
               <TableRow className={styles.headRow}>
-                <TableCell>Time</TableCell>
-                <TableCell>Temperature</TableCell>
-                <TableCell>Summary</TableCell>
-                <TableCell>Wind</TableCell>
+                <TableCell className={styles.tableHeader}>Time</TableCell>
+                <TableCell className={styles.tableHeader}>Temperature</TableCell>
+                <TableCell className={styles.tableHeader}>Summary</TableCell>
+                <TableCell className={styles.tableHeader}>Wind</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
