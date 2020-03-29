@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
+
+import { WeatherWeekProp } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -21,12 +24,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface WeekInfo {
-  data: any; // TODO check all any types
+interface WeekProp {
+  weatherWeek: WeatherWeekProp; // TODO check all any types
 }
 // TODO icons
 
-const Week: React.FC<WeekInfo> = ({ data }) => {
+const Week = (props: any) => {
+  const { weatherWeek } = props;
   const styles = useStyles();
 
   const today = new Date();
@@ -38,10 +42,10 @@ const Week: React.FC<WeekInfo> = ({ data }) => {
   };
 
   const week = [];
-  if (data) {
+  if (weatherWeek) {
     for (let i = 1; i < 8; i += 1) {
       const day = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
-      const { temperatureMin, temperatureMax } = data.data[i];
+      const { temperatureMin, temperatureMax } = weatherWeek.data[i];
       const temperature = Math.floor((temperatureMin + temperatureMax) / 2);
 
       week.push({
@@ -64,7 +68,7 @@ const Week: React.FC<WeekInfo> = ({ data }) => {
         )}`}
       </Typography>
       <div className={styles.weekDays}>
-        {data
+        {weatherWeek
           ? week.map((item): any => {
               const { weekDay, date, temperature } = item;
               return (
@@ -87,4 +91,12 @@ const Week: React.FC<WeekInfo> = ({ data }) => {
   );
 };
 
-export default Week;
+interface MapStateProps {
+  weatherWeek: WeatherWeekProp;
+}
+
+const mapStateToProps = ({ weatherWeek }: MapStateProps) => ({
+  weatherWeek,
+});
+
+export default connect(mapStateToProps, null)(Week);

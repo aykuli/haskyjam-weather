@@ -5,10 +5,17 @@ import {
   CHANGE_COUNTRY,
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
+  ADD_CITY_TO_HISTORY,
+  CHANGE_WEATHER_FOR_NEXT_48_HOURS,
+  CHANGE_WEEK_WEATHER,
 } from './action-types';
-import { NAVBAR_BTNS } from '../constantas/common';
+import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
+import { StoreType } from '../types';
 
-const initialState = {
+const ls = localStorage.getItem(CITIES_LIST);
+const history = ls === null ? [] : JSON.parse(ls);
+
+const initialState: StoreType = {
   currentTab: NAVBAR_BTNS[0],
   coordinates: {
     latitude: 0,
@@ -18,8 +25,9 @@ const initialState = {
   country: '',
   temperature: null,
   weatherInfo: '',
-  weather48Hours: {},
-  weatherWeek: {},
+  weather48Hours: null,
+  weatherWeek: null,
+  history,
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -55,6 +63,21 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         temperature: action.temperature,
+      };
+    case ADD_CITY_TO_HISTORY:
+      return {
+        ...state,
+        history: [...state.history, action.history],
+      };
+    case CHANGE_WEATHER_FOR_NEXT_48_HOURS:
+      return {
+        ...state,
+        weather48Hours: action.weather48Hours,
+      };
+    case CHANGE_WEEK_WEATHER:
+      return {
+        ...state,
+        weatherWeek: action.weatherWeek,
       };
     default:
       return state;

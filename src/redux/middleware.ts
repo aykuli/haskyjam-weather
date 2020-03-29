@@ -1,12 +1,17 @@
+import store from './store';
+import { ADD_CITY_TO_HISTORY } from './action-types';
+import { CITIES_LIST } from '../constantas/common';
+
 const middleware = () => {
   return (next: any) => {
     return (action: any) => {
-      // console.log('action: ', action);
-      // // console.log('store: ', store);
-      // if (action.type === REFRESH_FILTERED_DATA) {
-      //   console.log('action type REFRESH_FILTERED_DATA', action.payload);
-      // return store.dispatch({ type: REFRESH_FILTERED_DATA });
-      // }
+      if (action.type === ADD_CITY_TO_HISTORY) {
+        console.log('\n\nthere i want to save in localStorage ', action.history);
+        console.log('store: ', store.getState());
+        const state = store.getState();
+        localStorage.removeItem(CITIES_LIST);
+        localStorage.setItem(CITIES_LIST, JSON.stringify(state.history));
+      }
       return next(action);
     };
   };

@@ -5,35 +5,50 @@ import {
   CHANGE_COUNTRY,
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
+  ADD_CITY_TO_HISTORY,
+  CHANGE_WEATHER_FOR_NEXT_48_HOURS,
+  CHANGE_WEEK_WEATHER,
 } from './action-types';
+import { HistoryItem, Weather48HoursProp, WeatherWeekProp } from '../types';
 
-export interface StringType {
-  str: string;
-}
-
-export interface CurrentTabProps {
+interface CurrentTabProps {
   type: string;
   currentTab: string;
 }
 
-export interface CityProps {
+interface CityProps {
   type: string;
   city: string;
 }
 
-export interface CountryProps {
+interface CountryProps {
   type: string;
   country: string;
 }
 
-export interface WeatherInfoProps {
+interface WeatherInfoProps {
   type: string;
   weatherInfo: string;
 }
 
-export interface TemperatureProps {
+interface TemperatureProps {
   type: string;
   temperature: number;
+}
+
+interface HistoryProps {
+  type: string;
+  history: HistoryItem;
+}
+
+interface Weather48Props {
+  type: string;
+  weather48Hours: Weather48HoursProp | null;
+}
+
+interface WeekWeatherProps {
+  type: string;
+  weatherWeek: any | null;
 }
 
 export const refreshCoordinates = ({ latitude, longitude }: any) => {
@@ -73,5 +88,26 @@ export const changeCurrentTemperature = (temperature: number): TemperatureProps 
   return {
     type: CHANGE_CURRENT_TEMPERATURE,
     temperature,
+  };
+};
+
+export const addCityToHistory = (history: HistoryItem): HistoryProps => {
+  return {
+    type: ADD_CITY_TO_HISTORY,
+    history,
+  };
+};
+
+export const changeWeatherForNext48Hours = (weather48Hours: Weather48HoursProp): Weather48Props => {
+  return {
+    type: CHANGE_WEATHER_FOR_NEXT_48_HOURS,
+    weather48Hours,
+  };
+};
+
+export const changeWeatherWeek = (weatherWeek: WeatherWeekProp): WeekWeatherProps => {
+  return {
+    type: CHANGE_WEEK_WEATHER,
+    weatherWeek,
   };
 };

@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import Fakerator from 'fakerator';
 
-import { changeCurrentTab } from '../redux/actions';
+import { addCityToHistory } from '../redux/actions';
+import getRandomColor from '../services/color-generator';
+import { Coordinates, HistoryItem } from '../types';
 
 // TODO icons
 const useStyles = makeStyles((theme: Theme) => ({
@@ -40,15 +43,29 @@ interface MapStateProps {
   country: string;
   temperature: number;
   weatherInfo: string;
+  coordinates: Coordinates;
 }
 
-type Props = MapStateProps;
+interface MapDispatchProps {
+  setNewCityToHistory: (item: HistoryItem) => void;
+}
+
+type Props = MapStateProps & MapDispatchProps;
 
 const CurrentWeather = (props: Props) => {
-  const { temperature, city, country, weatherInfo } = props;
+  const { temperature, city, country, weatherInfo, coordinates, setNewCityToHistory } = props;
+
+  const fakerator = Fakerator('en-EN');
 
   const handleAddCity = () => {
-    console.log('handleAddCity');
+    const id = fakerator.random.masked('aaa-AAA_999999:*');
+    const color = getRandomColor();
+    setNewCityToHistory({
+      color,
+      id,
+      city,
+      coordinates,
+    });
   };
 
   const styles = useStyles();
@@ -75,16 +92,23 @@ const CurrentWeather = (props: Props) => {
   );
 };
 
-const mapStateToProps = ({ city, country, temperature, weatherInfo }: MapStateProps) => ({
+const mapStateToProps = ({
   city,
   country,
   temperature,
   weatherInfo,
+  coordinates,
+}: MapStateProps) => ({
+  city,
+  country,
+  temperature,
+  weatherInfo,
+  coordinates,
 });
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    changeCurrentTab: (newTab: string) => dispatch(changeCurrentTab(newTab)),
+    setNewCityToHistory: (history: HistoryItem) => dispatch(addCityToHistory(history)),
   };
 };
 
