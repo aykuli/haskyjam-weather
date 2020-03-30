@@ -16,6 +16,8 @@ import {
   changeWeatherForNext48Hours,
   changeWeatherWeek,
 } from '../redux/actions';
+import { Coordinates, Weather48HoursProp, WeatherWeekProp } from '../types';
+import { reverseGeocoding } from '../services/opencagedata';
 
 // components
 import Navbar from './navbar';
@@ -26,9 +28,6 @@ import DayWeather from './day-weather';
 
 // contantas
 import { NAVBAR_BTNS } from '../constantas/common';
-
-import { Coordinates, Weather48HoursProp, WeatherWeekProp } from '../types';
-import { reverseGeocoding } from '../services/opencagedata';
 
 // TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
@@ -85,7 +84,6 @@ const App = (props: AppProps) => {
     setWeatherWeek,
   } = props;
   // TODO вроде как CurrentWeather отличаетсяна разных страницах
-
   const styles = useStyles();
 
   useEffect(() => {
@@ -95,17 +93,28 @@ const App = (props: AppProps) => {
 
       setCoordinates({ latitude, longitude });
     });
-  }, []);
+  }, [
+    setCoordinates,
+    setCity,
+    setCountry,
+    setCurrentTemperature,
+    setWeather48hours,
+    setWeatherInfo,
+    setWeatherWeek,
+  ]);
 
   useEffect(() => {
+    console.log('здесь же должно меняться!!!');
     const { latitude, longitude } = coordinates;
     reverseGeocoding(latitude, longitude).then((data) => {
-      console.log('reverseGeocoding data: ', data);
-      console.log('daat: ', data.results[0].components);
       // const timezone = data.results[0].annotations.timezone.name;
       const { city, country } = data.results[0].components;
       setCity(city);
       setCountry(country);
+      if (city) {
+        window.history.pushState({ page: city }, city, `city=${city}`);
+      }
+      // console.log('window.history: ', window.history)
     });
     getWeatherByCoordinates(latitude, longitude, 'ru')
       .then((weather) => {
@@ -120,7 +129,15 @@ const App = (props: AppProps) => {
         console.log('error: ', e);
         // TODO show popup with error
       });
-  }, [coordinates]);
+  }, [
+    coordinates,
+    setCity,
+    setCountry,
+    setCurrentTemperature,
+    setWeather48hours,
+    setWeatherInfo,
+    setWeatherWeek,
+  ]);
   // TODO delete from mapStateProps coordinates
   const componentMaps = new Map();
   componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);
@@ -165,7 +182,7 @@ const mapDispatchToProps = {
   setWeatherWeek: (data: WeatherWeekProp) => changeWeatherWeek(data),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(App);
 
 // TODO env-cmd разобраться что за модуль
 // TODO App ConnectedApp поменять местами

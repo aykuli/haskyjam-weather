@@ -157,4 +157,4 @@ const mapDispatchToProps = {
   setCountry: (str: string) => changeCountry(str),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Navbar);

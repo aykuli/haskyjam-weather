@@ -4,7 +4,7 @@ export interface Coordinates {
 }
 
 export interface HistoryItem {
-  id: number;
+  id: string;
   city: string;
   color: string;
   coordinates: Coordinates;

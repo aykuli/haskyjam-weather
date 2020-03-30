@@ -69,7 +69,6 @@ interface EmptyHistoryProps {
 }
 
 export const refreshCoordinates = ({ latitude, longitude }: Coordinates): CoordinatesProps => {
-  console.log('{ latitude, longitude }: ', { latitude, longitude });
   return {
     type: REFRESH_COORDINATES,
     coordinates: { latitude, longitude },

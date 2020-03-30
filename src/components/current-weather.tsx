@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, RootStateOrAny } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -46,11 +46,11 @@ interface MapStateProps {
   coordinates: Coordinates;
 }
 
-interface MapDispatchProps {
+interface DispatchProps {
   setNewCityToHistory: (item: HistoryItem) => void;
 }
 
-type Props = MapStateProps & MapDispatchProps;
+type Props = MapStateProps & DispatchProps;
 
 const CurrentWeather = (props: Props) => {
   const { temperature, city, country, weatherInfo, coordinates, setNewCityToHistory } = props;
@@ -92,22 +92,19 @@ const CurrentWeather = (props: Props) => {
   );
 };
 
-const mapStateToProps = ({
-  city,
-  country,
-  temperature,
-  weatherInfo,
-  coordinates,
-}: MapStateProps) => ({
-  city,
-  country,
-  temperature,
-  weatherInfo,
-  coordinates,
+const mapStateToProps = (state: RootStateOrAny) => ({
+  city: state.city,
+  country: state.country,
+  temperature: state.temperature,
+  weatherInfo: state.weatherInfo,
+  coordinates: state.coordinates,
 });
 
 const mapDispatchToProps = {
   setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrentWeather);
+export default connect<MapStateProps, DispatchProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(CurrentWeather);

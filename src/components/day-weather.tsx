@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'flex-end',
+    minHeight: 550,
     padding: 40,
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center',
