@@ -9,7 +9,14 @@ import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles'
 import { NAVBAR_BTNS, SEARCH_PLACEHOLDER } from '../constantas/common';
 import { DADATA } from '../constantas/api-keys';
 
-import { changeCurrentTab as changeTab, refreshCoordinates } from '../redux/actions';
+import { Coordinates, DadataSuggestion } from '../types';
+
+import {
+  changeCurrentTab as changeTab,
+  refreshCoordinates,
+  changeCity,
+  changeCountry,
+} from '../redux/actions';
 import { forwardGeocoding } from '../services/opencagedata';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,7 +74,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Navbar = (props: any) => {
+interface MapStateProps {
+  currentTab: string;
+}
+
+interface DispatchProps {
+  setCoordinates: (data: Coordinates) => void;
+  setCity: (str: string) => void;
+  setCountry: (str: string) => void;
+  changeCurrentTab: (newTab: string) => void;
+}
+
+type AppProps = MapStateProps & DispatchProps;
+
+const Navbar = (props: AppProps) => {
   const { changeCurrentTab, currentTab, setCoordinates } = props;
 
   const styles = useStyles();
@@ -79,7 +99,7 @@ const Navbar = (props: any) => {
     changeCurrentTab(innerText);
   };
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: DadataSuggestion) => {
     console.log('1: ', e);
     const settlement = e.data.city;
     forwardGeocoding(settlement).then((data) => {
@@ -131,11 +151,11 @@ const mapStateToProps = (state: RootStateOrAny) => ({
   currentTab: state.currentTab,
 });
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    changeCurrentTab: (newTab: string) => dispatch(changeTab(newTab)),
-    setCoordinates: (data: Coordinates) => refreshCoordinates(data),
-  };
+const mapDispatchToProps = {
+  changeCurrentTab: (newTab: string) => changeTab(newTab),
+  setCoordinates: (data: Coordinates) => refreshCoordinates(data),
+  setCity: (str: string) => changeCity(str),
+  setCountry: (str: string) => changeCountry(str),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

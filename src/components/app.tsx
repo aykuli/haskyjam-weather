@@ -90,7 +90,7 @@ const App = (props: AppProps) => {
 
   useEffect(() => {
     getCoordinates().then((data) => {
-      console.log('data: ', data);
+      console.log('getCoordinates data: ', data);
       const { latitude, longitude } = data;
 
       setCoordinates({ latitude, longitude });
@@ -100,7 +100,9 @@ const App = (props: AppProps) => {
   useEffect(() => {
     const { latitude, longitude } = coordinates;
     reverseGeocoding(latitude, longitude).then((data) => {
+      console.log('reverseGeocoding data: ', data);
       console.log('daat: ', data.results[0].components);
+      // const timezone = data.results[0].annotations.timezone.name;
       const { city, country } = data.results[0].components;
       setCity(city);
       setCountry(country);
@@ -111,11 +113,12 @@ const App = (props: AppProps) => {
         setWeather48hours(weather.hourly);
         setWeatherWeek(weather.daily);
         setCurrentTemperature(weather.currently.temperature);
-        const txt = `${weather.currently.summary}, ветер - ${weather.currently.windSpeed} м/с`;
+        const txt = `${weather.currently.summary}, Ветер - ${weather.currently.windSpeed} м/с`;
         setWeatherInfo(txt);
       })
       .catch((e) => {
         console.log('error: ', e);
+        // TODO show popup with error
       });
   }, [coordinates]);
   // TODO delete from mapStateProps coordinates
@@ -124,7 +127,7 @@ const App = (props: AppProps) => {
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
   componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
   componentMaps.set(NAVBAR_BTNS[3], <Week />);
-
+  // TODO может скелетоны перенести внутрь CurrentWeather component
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
