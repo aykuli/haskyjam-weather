@@ -1,11 +1,13 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
 import { connect } from 'react-redux';
-import { InputBase, ButtonGroup, Button } from '@material-ui/core';
+import { ReactDadata } from 'react-dadata';
+import { ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
 
 import { NAVBAR_BTNS } from '../constantas/common';
+import { DADATA } from '../constantas/api-keys';
 
 import { changeCurrentTab as changeTab } from '../redux/actions';
 
@@ -49,6 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2),
       height: '100%',
       position: 'absolute',
+      top: 0,
+      left: -40,
       pointerEvents: 'none',
       display: 'flex',
       alignItems: 'center',
@@ -57,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
     inputRoot: {
       minWidth: 250,
       width: '100%',
-      color: theme.palette.primary.contrastText,
+      color: theme.palette.text.primary,
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
@@ -111,14 +115,9 @@ const ConnectedNavbar = (props: any) => {
         <div className={styles.searchIcon}>
           <SearchIcon color="secondary" />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: styles.inputRoot,
-            input: styles.inputInput,
-          }}
-          inputProps={{ 'aria-label': 'search city' }}
-        />
+        <div className={styles.inputRoot}>
+          <ReactDadata token={DADATA} query="Москва" placeholder="" />
+        </div>
       </div>
     </div>
   );

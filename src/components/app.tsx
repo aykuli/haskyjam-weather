@@ -23,7 +23,6 @@ import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
 import DayWeather from './day-weather';
-import Input from './input';
 
 // contantas
 import { NAVBAR_BTNS } from '../constantas/common';
@@ -88,7 +87,7 @@ const App = (props: any) => {
           setWeatherInfo(txt);
         })
         .catch((e) => {
-          console.log('e: ', e);
+          console.log('error: ', e);
         });
     });
   }, []);
@@ -104,7 +103,6 @@ const App = (props: any) => {
       <CssBaseline />
       <div className={styles.container}>
         <Navbar />
-        <Input />
         {temperature === null ? (
           <div className={styles.sceleton}>
             <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />

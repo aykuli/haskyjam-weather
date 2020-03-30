@@ -15,7 +15,6 @@ const getWeather = async (latitude: number, longitude: number, lang: string) => 
   const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${DARKSKY_KEY}/${latitude},${longitude}?lang=${lang}&units=${unit}`;
 
   const response = await fetch(url);
-
   const data = await response.json();
   return data;
 };
