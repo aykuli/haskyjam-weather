@@ -45,10 +45,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   table: {
     minWidth: 250,
-    [theme.breakpoints.down('sm')]: {
-      '& td, & td:last-child, & td:first-child': {
-        padding: '5px 7px',
-      },
+    '& td, & td:last-child, & td:first-child': {
+      padding: '5px 7px',
     },
     '& td, & th': {
       fontSize: '1rem',
@@ -78,7 +76,7 @@ const DayWeather = (props: Props) => {
   const today = new Date();
   const day = title === NAVBAR_BTNS[1] ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
   const level = day.getDate();
-  const date = day.toLocaleDateString('en-US', {
+  const date = day.toLocaleDateString('ru-RU', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -97,10 +95,10 @@ const DayWeather = (props: Props) => {
           <Table className={styles.table} size="small" aria-label={`${title} weather`}>
             <TableHead>
               <TableRow className={styles.headRow}>
-                <TableCell className={styles.tableHeader}>Time</TableCell>
-                <TableCell className={styles.tableHeader}>Temperature</TableCell>
-                <TableCell className={styles.tableHeader}>Summary</TableCell>
-                <TableCell className={styles.tableHeader}>Wind</TableCell>
+                <TableCell className={styles.tableHeader}>Время</TableCell>
+                <TableCell className={styles.tableHeader}>Температура</TableCell>
+                <TableCell className={styles.tableHeader}>Описание</TableCell>
+                <TableCell className={styles.tableHeader}>Ветер</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -119,7 +117,7 @@ const DayWeather = (props: Props) => {
                         </TableCell>
                         <TableCell>{`${temperature} °C`}</TableCell>
                         <TableCell>{summary}</TableCell>
-                        <TableCell>{`${windSpeed} m/s`}</TableCell>
+                        <TableCell>{`${windSpeed} м/с`}</TableCell>
                       </TableRow>
                     ) : null;
                   })

@@ -69,7 +69,7 @@ const CurrentWeather = (props: Props) => {
   };
 
   const styles = useStyles();
-  const date = getDate('en'); // TODO we can make language changing
+  const date = getDate('ru'); // TODO we can make language changing
 
   return (
     <div className={styles.main}>

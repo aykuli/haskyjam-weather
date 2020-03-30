@@ -104,7 +104,6 @@ const Navbar = (props: AppProps) => {
     const settlement = e.data.city;
     forwardGeocoding(settlement).then((data) => {
       const coordinates = data.results[0].geometry;
-      console.log('forwardGeocoding data: ', coordinates);
       setCoordinates({ latitude: coordinates.lat, longitude: coordinates.lng });
     });
   };

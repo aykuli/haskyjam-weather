@@ -104,7 +104,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
   return (
     <div className={styles.container}>
       <Typography variant="h2" component="h2">
-        Saved Cities
+        Сохраненные города
       </Typography>
       <Tooltip title="Clear history" aria-label="Clear history">
         <Fab color="primary" className={styles.deleteAllBtn} onClick={setEmptyHistory}>
@@ -113,7 +113,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
       </Tooltip>
       {showList.length === 0 ? (
         <Alert severity="info" variant="outlined">
-          Yout history is empty. You can add place clicking on Add button higher.
+          Ваша история пуста. Возможно, самое время пополнить коллекцию?
         </Alert>
       ) : (
         <div className={styles.history}>
@@ -141,7 +141,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
             );
           })}
           <Button variant="contained" className={styles.showHistory}>
-            Show all history
+            Показать всю историю
           </Button>
         </div>
       )}
