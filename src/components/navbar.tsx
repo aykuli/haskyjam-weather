@@ -1,15 +1,16 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, RootStateOrAny } from 'react-redux';
 import { ReactDadata } from 'react-dadata';
 import { ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
 
-import { NAVBAR_BTNS } from '../constantas/common';
+import { NAVBAR_BTNS, SEARCH_PLACEHOLDER } from '../constantas/common';
 import { DADATA } from '../constantas/api-keys';
 
-import { changeCurrentTab as changeTab } from '../redux/actions';
+import { changeCurrentTab as changeTab, refreshCoordinates } from '../redux/actions';
+import { forwardGeocoding } from '../services/opencagedata';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,24 +64,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       color: theme.palette.text.primary,
     },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '25ch',
-        },
-      },
-    },
   })
 );
 
-const ConnectedNavbar = (props: any) => {
-  const { changeCurrentTab, currentTab } = props;
+const Navbar = (props: any) => {
+  const { changeCurrentTab, currentTab, setCoordinates } = props;
 
   const styles = useStyles();
 
@@ -89,6 +77,16 @@ const ConnectedNavbar = (props: any) => {
   ) => {
     const { innerText } = e.target as HTMLButtonElement;
     changeCurrentTab(innerText);
+  };
+
+  const handleSearch = (e: any) => {
+    console.log('1: ', e);
+    const settlement = e.data.city;
+    forwardGeocoding(settlement).then((data) => {
+      const coordinates = data.results[0].geometry;
+      console.log('forwardGeocoding data: ', coordinates);
+      setCoordinates({ latitude: coordinates.lat, longitude: coordinates.lng });
+    });
   };
 
   return (
@@ -116,20 +114,28 @@ const ConnectedNavbar = (props: any) => {
           <SearchIcon color="secondary" />
         </div>
         <div className={styles.inputRoot}>
-          <ReactDadata token={DADATA} query="Москва" placeholder="" />
+          <ReactDadata
+            token={DADATA}
+            query=""
+            autoload
+            placeholder={SEARCH_PLACEHOLDER}
+            onChange={handleSearch}
+          />
         </div>
       </div>
     </div>
   );
 };
-const mapStateToProps = ({ currentTab }: any) => ({ currentTab });
+
+const mapStateToProps = (state: RootStateOrAny) => ({
+  currentTab: state.currentTab,
+});
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     changeCurrentTab: (newTab: string) => dispatch(changeTab(newTab)),
+    setCoordinates: (data: Coordinates) => refreshCoordinates(data),
   };
 };
 
-const Navbar = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavbar);
-
-export default Navbar;
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

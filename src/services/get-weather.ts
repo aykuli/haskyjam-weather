@@ -5,7 +5,7 @@ interface RequestCors {
   type: string;
 }
 
-const getWeather = async (latitude: number, longitude: number, lang: string) => {
+const getWeatherByCoordinates = async (latitude: number, longitude: number, lang: string) => {
   // try to fetcj to opencagedata. Work bad
   // const units = 'metric';
   // const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${OPEN_WEATHER_KEY}&lang=${lang}&units=${units}`;
@@ -19,4 +19,4 @@ const getWeather = async (latitude: number, longitude: number, lang: string) => 
   return data;
 };
 
-export default getWeather;
+export default getWeatherByCoordinates;

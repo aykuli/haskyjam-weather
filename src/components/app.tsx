@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, RootStateOrAny } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
-import getWeather from '../services/get-weather';
+import getWeatherByCoordinates from '../services/get-weather';
 import {
   refreshCoordinates,
   changeCity,
@@ -27,7 +27,8 @@ import DayWeather from './day-weather';
 // contantas
 import { NAVBAR_BTNS } from '../constantas/common';
 
-import { Coordinates, Weather48HoursProp } from '../types';
+import { Coordinates, Weather48HoursProp, WeatherWeekProp } from '../types';
+import { reverseGeocoding } from '../services/opencagedata';
 
 // TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
@@ -52,10 +53,29 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const App = (props: any) => {
+interface MapStateProps {
+  currentTab: string;
+  temperature: number;
+  coordinates: Coordinates;
+}
+
+interface DispatchProps {
+  setCoordinates: (data: Coordinates) => void;
+  setCity: (str: string) => void;
+  setCountry: (str: string) => void;
+  setWeatherInfo: (str: string) => void;
+  setCurrentTemperature: (numb: number) => void;
+  setWeather48hours: (data: Weather48HoursProp) => void;
+  setWeatherWeek: (data: any) => void;
+}
+
+type AppProps = MapStateProps & DispatchProps;
+
+const App = (props: AppProps) => {
   const {
     temperature,
     currentTab,
+    coordinates,
     setCoordinates,
     setCity,
     setCountry,
@@ -74,24 +94,31 @@ const App = (props: any) => {
       const { latitude, longitude } = data;
 
       setCoordinates({ latitude, longitude });
-      setCity(data.city);
-      setCountry(data.country);
-
-      getWeather(latitude, longitude, 'en')
-        .then((weather) => {
-          console.log('weather: ', weather.daily);
-          setWeather48hours(weather.hourly);
-          setWeatherWeek(weather.daily);
-          setCurrentTemperature(weather.currently.temperature);
-          const txt = `${weather.currently.summary}, Wind - ${weather.currently.windSpeed} m/s`;
-          setWeatherInfo(txt);
-        })
-        .catch((e) => {
-          console.log('error: ', e);
-        });
     });
   }, []);
 
+  useEffect(() => {
+    const { latitude, longitude } = coordinates;
+    reverseGeocoding(latitude, longitude).then((data) => {
+      console.log('daat: ', data.results[0].components);
+      const { city, country } = data.results[0].components;
+      setCity(city);
+      setCountry(country);
+    });
+    getWeatherByCoordinates(latitude, longitude, 'ru')
+      .then((weather) => {
+        console.log('weather: ', weather);
+        setWeather48hours(weather.hourly);
+        setWeatherWeek(weather.daily);
+        setCurrentTemperature(weather.currently.temperature);
+        const txt = `${weather.currently.summary}, ветер - ${weather.currently.windSpeed} м/с`;
+        setWeatherInfo(txt);
+      })
+      .catch((e) => {
+        console.log('error: ', e);
+      });
+  }, [coordinates]);
+  // TODO delete from mapStateProps coordinates
   const componentMaps = new Map();
   componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
@@ -119,18 +146,10 @@ const App = (props: any) => {
   );
 };
 
-interface MapStateProps {
-  currentTab: string;
-  coordinates: Coordinates;
-  city: string;
-  country: string;
-  temperature: number;
-}
-
-const mapStateToProps = ({ currentTab, country, temperature }: MapStateProps) => ({
-  currentTab,
-  country,
-  temperature,
+const mapStateToProps = (state: RootStateOrAny) => ({
+  currentTab: state.currentTab,
+  temperature: state.temperature,
+  coordinates: state.coordinates,
 });
 
 const mapDispatchToProps = {
@@ -140,7 +159,7 @@ const mapDispatchToProps = {
   setWeatherInfo: (str: string) => changeWeatherInfo(str),
   setCurrentTemperature: (numb: number) => changeCurrentTemperature(numb),
   setWeather48hours: (data: Weather48HoursProp) => changeWeatherForNext48Hours(data),
-  setWeatherWeek: (data: any) => changeWeatherWeek(data),
+  setWeatherWeek: (data: WeatherWeekProp) => changeWeatherWeek(data),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -11,7 +11,12 @@ import {
   DELETE_CITY_FROM_HISTORY,
   CLEAR_HISTORY,
 } from './action-types';
-import { HistoryItem, Weather48HoursProp, WeatherWeekProp } from '../types';
+import { HistoryItem, Weather48HoursProp, WeatherWeekProp, Coordinates } from '../types';
+
+interface CoordinatesProps {
+  type: string;
+  coordinates: Coordinates;
+}
 
 interface CurrentTabProps {
   type: string;
@@ -63,8 +68,12 @@ interface EmptyHistoryProps {
   history: Array<HistoryItem>;
 }
 
-export const refreshCoordinates = ({ latitude, longitude }: any) => {
-  return { type: REFRESH_COORDINATES, coordinates: { latitude, longitude } };
+export const refreshCoordinates = ({ latitude, longitude }: Coordinates): CoordinatesProps => {
+  console.log('{ latitude, longitude }: ', { latitude, longitude });
+  return {
+    type: REFRESH_COORDINATES,
+    coordinates: { latitude, longitude },
+  };
 };
 
 export const changeCurrentTab = (currentTab: string): CurrentTabProps => {

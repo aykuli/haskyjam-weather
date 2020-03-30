@@ -106,10 +106,8 @@ const mapStateToProps = ({
   coordinates,
 });
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setNewCityToHistory: (history: HistoryItem) => dispatch(addCityToHistory(history)),
-  };
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentWeather);
