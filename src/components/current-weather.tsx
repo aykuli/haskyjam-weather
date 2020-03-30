@@ -61,10 +61,10 @@ const CurrentWeather = (props: Props) => {
     const id = fakerator.random.masked('aaa-AAA_999999:*');
     const color = getRandomColor();
     setNewCityToHistory({
-      color,
       id,
       city,
       coordinates,
+      color,
     });
   };
 
@@ -74,12 +74,12 @@ const CurrentWeather = (props: Props) => {
   return (
     <div className={styles.main}>
       <Typography variant="h1" component="p">{`${temperature} °C`}</Typography>
-      <Typography variant="body1" component="p">{`${city}, ${country}`}</Typography>
+      <Typography variant="body2" component="p">{`${city}, ${country}`}</Typography>
       <>
-        <Typography variant="body1" component="p">
+        <Typography variant="body2" component="p">
           {date}
         </Typography>
-        <Typography variant="body2" component="p">
+        <Typography variant="caption" component="p">
           {weatherInfo}
         </Typography>
       </>

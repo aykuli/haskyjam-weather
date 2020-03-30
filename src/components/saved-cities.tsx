@@ -15,7 +15,7 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { addCityToHistory, removeCityToHistory, clearHistory } from '../redux/actions';
+import { removeCityToHistory, clearHistory } from '../redux/actions';
 import { Coordinates, HistoryItem } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -37,8 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   city: {
     position: 'relative',
-    backgroundColor: theme.palette.primary.light,
     height: 100,
+    color: theme.palette.text.secondary,
+    backgroundColor: theme.palette.primary.light,
     opacity: 0.8,
     '&:hover': {
       opacity: 1,
@@ -73,22 +74,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 //   handleDeleteCity: (item: string) => void;
 // }
 
-interface CityData {
-  id: string;
-  city: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  color: string;
-}
+// interface CityData {
+//   id: string;
+//   city: string;
+//   coordinates: {
+//     latitude: number;
+//     longitude: number;
+//   };
+//   color: string;
+// }
 
 interface MapStateProps {
   history: Array<HistoryItem>;
 }
 
 interface MapDispatchProps {
-  setNewCityToHistory: (item: HistoryItem) => void;
   deleteCityFromHistory: (id: string) => void;
   setEmptyHistory: () => void;
 }
@@ -96,7 +96,7 @@ interface MapDispatchProps {
 type SavedCitiesProps = MapStateProps & MapDispatchProps;
 
 const SavedCities: React.FC<SavedCitiesProps> = (props) => {
-  const { history, setNewCityToHistory, deleteCityFromHistory, setEmptyHistory } = props;
+  const { history, deleteCityFromHistory, setEmptyHistory } = props;
   const styles = useStyles();
 
   const showList = history.length < 8 ? history : history.slice(0, 7);
@@ -117,12 +117,12 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
         </Alert>
       ) : (
         <div className={styles.history}>
-          {showList.map((cityData: HistoryItem, i: number) => {
+          {showList.map((cityData: HistoryItem) => {
             const { id, city, color } = cityData;
             return (
               <Card key={id} className={styles.city} style={{ backgroundColor: color }}>
                 <CardContent>
-                  <Typography variant="h3" component="span">
+                  <Typography variant="body1" component="p">
                     {city}
                   </Typography>
                 </CardContent>
@@ -131,7 +131,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
                     <Fab
                       size="small"
                       className={styles.deleteBtn}
-                      onClick={() => deleteCityFromHistory('aaa-AAA_999999:1')}
+                      onClick={() => deleteCityFromHistory(id.toString())}
                     >
                       <DeleteIcon />
                     </Fab>
@@ -154,8 +154,7 @@ const mapStateToProps = ({ history }: MapStateProps) => ({ history });
 // TODO refactor mapDispatchToProps
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setNewCityToHistory: (history: HistoryItem) => dispatch(addCityToHistory(history)),
-    deleteCityFromHistory: (id: string) => dispatch(removeCityToHistory(id)),
+    deleteCityFromHistory: (id: any) => dispatch(removeCityToHistory(id)),
     setEmptyHistory: () => dispatch(clearHistory()),
   };
 };

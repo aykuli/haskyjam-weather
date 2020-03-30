@@ -60,10 +60,10 @@ const theme = createMuiTheme({
     body1: {
       fontSize: '1.6rem',
       lineHeight: '1.6',
-      color: '#3d4451',
+      color: '#ffffff',
     },
     body2: {
-      fontSize: '1rem',
+      fontSize: '1.6rem',
       lineHeight: '1.4',
       color: '#3d4451',
     },
@@ -73,7 +73,7 @@ const theme = createMuiTheme({
       color: '#403d51',
     },
     caption: {
-      fontSize: '.8rem',
+      fontSize: '1.2rem',
       lineHeight: '1',
       color: '#000000',
     },

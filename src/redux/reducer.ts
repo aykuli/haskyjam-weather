@@ -13,9 +13,10 @@ import {
 } from './action-types';
 import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
 import { StoreType } from '../types';
+import FAKE_HISTORY from '../services/fake-history';
 
 const ls = localStorage.getItem(CITIES_LIST);
-const history = ls === null ? [] : JSON.parse(ls);
+const history = ls === null ? FAKE_HISTORY : JSON.parse(ls);
 // HistoryItem  is shape of {
 //   color,
 //   id,
@@ -90,7 +91,7 @@ const reducer = (state = initialState, action: any) => {
     case DELETE_CITY_FROM_HISTORY:
       return {
         ...state,
-        history: [...state.history, action.history],
+        history: state.history.filter((item) => item.id !== action.id),
       };
     case CLEAR_HISTORY:
       return {

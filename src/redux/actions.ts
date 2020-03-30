@@ -38,11 +38,6 @@ interface TemperatureProps {
   temperature: number;
 }
 
-interface HistoryProps {
-  type: string;
-  history: HistoryItem;
-}
-
 interface Weather48Props {
   type: string;
   weather48Hours: Weather48HoursProp | null;
@@ -53,8 +48,19 @@ interface WeekWeatherProps {
   weatherWeek: any | null;
 }
 
-interface Type {
+interface RemoveCityProps {
   type: string;
+  id: string;
+}
+
+interface HistoryProps {
+  type: string;
+  history: HistoryItem;
+}
+
+interface EmptyHistoryProps {
+  type: string;
+  history: Array<HistoryItem>;
 }
 
 export const refreshCoordinates = ({ latitude, longitude }: any) => {
@@ -62,7 +68,6 @@ export const refreshCoordinates = ({ latitude, longitude }: any) => {
 };
 
 export const changeCurrentTab = (currentTab: string): CurrentTabProps => {
-  console.log('currentTab: ', currentTab);
   return {
     type: CHANGE_CURRENT_TAB,
     currentTab,
@@ -118,15 +123,17 @@ export const addCityToHistory = (history: HistoryItem): HistoryProps => {
   };
 };
 
-export const removeCityToHistory = (id: string): Type => {
+export const removeCityToHistory = (id: string): RemoveCityProps => {
   console.log('id: ', id);
   return {
     type: DELETE_CITY_FROM_HISTORY,
+    id,
   };
 };
 
-export const clearHistory = (): Type => {
+export const clearHistory = (): EmptyHistoryProps => {
   return {
     type: CLEAR_HISTORY,
+    history: [],
   };
 };
