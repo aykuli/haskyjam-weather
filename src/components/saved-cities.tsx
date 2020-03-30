@@ -16,7 +16,7 @@ import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { removeCityToHistory, clearHistory } from '../redux/actions';
-import { Coordinates, HistoryItem } from '../types';
+import { HistoryItem } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {

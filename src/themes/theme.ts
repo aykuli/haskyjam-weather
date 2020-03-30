@@ -66,6 +66,7 @@ const theme = createMuiTheme({
       fontSize: '1.6rem',
       lineHeight: '1.4',
       color: '#3d4451',
+      padding: '5px 0 5px',
     },
     button: {
       fontSize: '1rem',

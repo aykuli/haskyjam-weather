@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { connect, RootStateOrAny } from 'react-redux';
 import { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+
+import { HistoryItem, Coordinates } from '../types';
+import { addCityToHistory } from '../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   marker: {
@@ -34,17 +38,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface MarkerProps {
-  latitude: number;
-  longitude: number;
-  // place: string;
+interface MapStateProps {
+  coordinates: Coordinates;
 }
 
-const MapMarker: React.FC<MarkerProps> = ({
-  latitude,
-  longitude,
-  //   info,
-}) => {
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+type Props = MapStateProps & DispatchProps;
+
+const MapMarker = (props: Props) => {
+  const { coordinates } = props;
+  const { latitude, longitude } = coordinates;
+
   const [isShowPopup, setIsShowPopup] = useState(false);
 
   const styles = useStyles();
@@ -83,5 +90,20 @@ const MapMarker: React.FC<MarkerProps> = ({
     </>
   );
 };
+const mapStateToProps = (state: RootStateOrAny) => ({
+  coordinates: state.coordinates,
+  temperatureCurrent: state.temperature,
+});
 
-export default MapMarker;
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
+};
+
+export default connect<MapStateProps, DispatchProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapMarker);
