@@ -83,7 +83,8 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
   const { history, deleteCityFromHistory, setEmptyHistory } = props;
   const styles = useStyles();
 
-  const showList = history.length < 8 ? history.reverse() : history.slice(0, 7).reverse();
+  const showList = history.length < 8 ? history.slice() : history.slice(0, 7);
+  showList.reverse();
 
   return (
     <div className={styles.container}>
