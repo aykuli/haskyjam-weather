@@ -93,9 +93,18 @@ const App = (props: AppProps) => {
 
       setCoordinates({ latitude, longitude });
     });
-  }, []);
+  }, [
+    setCoordinates,
+    setCity,
+    setCountry,
+    setCurrentTemperature,
+    setWeather48hours,
+    setWeatherInfo,
+    setWeatherWeek,
+  ]);
 
   useEffect(() => {
+    console.log('здесь же должно меняться!!!');
     const { latitude, longitude } = coordinates;
     reverseGeocoding(latitude, longitude).then((data) => {
       // const timezone = data.results[0].annotations.timezone.name;
@@ -120,7 +129,15 @@ const App = (props: AppProps) => {
         console.log('error: ', e);
         // TODO show popup with error
       });
-  }, [coordinates]);
+  }, [
+    coordinates,
+    setCity,
+    setCountry,
+    setCurrentTemperature,
+    setWeather48hours,
+    setWeatherInfo,
+    setWeatherWeek,
+  ]);
   // TODO delete from mapStateProps coordinates
   const componentMaps = new Map();
   componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);

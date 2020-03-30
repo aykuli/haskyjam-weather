@@ -1,28 +1,28 @@
 export default [
   {
     id: 'aaa-AAA_999999:0',
-    city: 'Лондон',
+    city: 'Барнаул',
     coordinates: {
-      latitude: 51.5072,
-      longitude: -0.13,
+      latitude: 53.3606,
+      longitude: 83.7636,
     },
     color: '#FFAA22',
   },
   {
     id: 'aaa-AAA_999999:1',
-    city: 'Сидней',
+    city: 'Москва',
     coordinates: {
-      latitude: 33.5,
-      longitude: 151.12,
+      latitude: 55.7504461,
+      longitude: 37.6174943,
     },
     color: '#55AA22',
   },
   {
     id: 'aaa-AAA_999999:2',
-    city: 'Рио',
+    city: 'Красноярск',
     coordinates: {
-      latitude: 22.5,
-      longitude: 43.12,
+      latitude: 56.0090968,
+      longitude: 92.8725147,
     },
     color: '#BBAA22',
   },

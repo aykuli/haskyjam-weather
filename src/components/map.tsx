@@ -4,7 +4,6 @@ import MapGL, { FlyToInterpolator, GeolocateControl, ScaleControl } from 'react-
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { easeCubic } from 'd3-ease';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
 
 import MapMarker from './map-marker';
 
@@ -83,35 +82,26 @@ const Map = (props: Props) => {
   });
   const mapTheme = 'streets-v11';
 
-  const gotoCurrentPlace = () => {
-    const viewportCurrent = {
-      ...viewport,
-      longitude,
-      latitude,
-      zoom: 10,
-      transitionDuration: 'auto',
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: easeCubic,
-    };
-    setViewport(viewportCurrent);
-  };
-
   useEffect(() => {
+    const gotoCurrentPlace = () => {
+      const viewportCurrent = {
+        ...viewport,
+        longitude,
+        latitude,
+        zoom: 10,
+        transitionDuration: 'auto',
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+      };
+      setViewport(viewportCurrent);
+    };
+
     gotoCurrentPlace();
-  }, [coordinates]);
+  }, [coordinates, latitude, longitude]);
 
   return (
     <>
       <div id="map-container" className={styles.mapContainer}>
-        <Button
-          onClick={gotoCurrentPlace}
-          aria-label="Back to current place"
-          variant="contained"
-          color="primary"
-          size="small"
-        >
-          Back to current place
-        </Button>
         <MapGL
           {...viewport}
           onViewportChange={setViewport}

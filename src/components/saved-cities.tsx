@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, RootStateOrAny } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Typography,
@@ -71,17 +71,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface MapStateProps {
+interface StateProps {
   history: Array<HistoryItem>;
 }
 
-interface MapDispatchProps {
+interface DispatchProps {
   deleteCityFromHistory: (id: string) => void;
   setEmptyHistory: () => void;
   setCoordinates: (data: Coordinates) => void;
 }
 
-type SavedCitiesProps = MapStateProps & MapDispatchProps;
+type SavedCitiesProps = StateProps & DispatchProps;
 
 const SavedCities: React.FC<SavedCitiesProps> = (props) => {
   const { history, deleteCityFromHistory, setEmptyHistory, setCoordinates } = props;
@@ -149,16 +149,14 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
     </div>
   );
 };
+const mapStateToProps = (state: RootStateOrAny) => ({
+  history: state.history,
+});
 
-const mapStateToProps = ({ history }: MapStateProps) => ({ history });
-
-// TODO refactor mapDispatchToProps
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    deleteCityFromHistory: (id: any) => dispatch(removeCityToHistory(id)),
-    setEmptyHistory: () => dispatch(clearHistory()),
-    setCoordinates: (data: Coordinates) => refreshCoordinates(data),
-  };
+const mapDispatchToProps = {
+  deleteCityFromHistory: (id: any) => removeCityToHistory(id),
+  setEmptyHistory: () => clearHistory(),
+  setCoordinates: (data: Coordinates) => refreshCoordinates(data),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SavedCities);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(SavedCities);
