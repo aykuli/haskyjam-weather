@@ -85,7 +85,6 @@ const App = (props: AppProps) => {
     setWeatherWeek,
   } = props;
   // TODO вроде как CurrentWeather отличаетсяна разных страницах
-
   const styles = useStyles();
 
   useEffect(() => {
@@ -100,12 +99,14 @@ const App = (props: AppProps) => {
   useEffect(() => {
     const { latitude, longitude } = coordinates;
     reverseGeocoding(latitude, longitude).then((data) => {
-      console.log('reverseGeocoding data: ', data);
-      console.log('daat: ', data.results[0].components);
       // const timezone = data.results[0].annotations.timezone.name;
       const { city, country } = data.results[0].components;
       setCity(city);
       setCountry(country);
+      if (city) {
+        window.history.pushState({ page: city }, city, `city=${city}`);
+      }
+      // console.log('window.history: ', window.history)
     });
     getWeatherByCoordinates(latitude, longitude, 'ru')
       .then((weather) => {

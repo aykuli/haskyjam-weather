@@ -68,22 +68,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// interface SavedCitiesProps {
-//   history: any;
-//   handleClearHistory: () => void;
-//   handleDeleteCity: (item: string) => void;
-// }
-
-// interface CityData {
-//   id: string;
-//   city: string;
-//   coordinates: {
-//     latitude: number;
-//     longitude: number;
-//   };
-//   color: string;
-// }
-
 interface MapStateProps {
   history: Array<HistoryItem>;
 }
@@ -99,7 +83,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
   const { history, deleteCityFromHistory, setEmptyHistory } = props;
   const styles = useStyles();
 
-  const showList = history.length < 8 ? history : history.slice(0, 7);
+  const showList = history.length < 8 ? history.reverse() : history.slice(0, 7).reverse();
 
   return (
     <div className={styles.container}>
@@ -120,7 +104,14 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
           {showList.map((cityData: HistoryItem) => {
             const { id, city, color } = cityData;
             return (
-              <Card key={id} className={styles.city} style={{ backgroundColor: color }}>
+              <Card
+                key={id}
+                className={styles.city}
+                style={{ backgroundColor: color }}
+                onClick={() => {
+                  console.log('click');
+                }}
+              >
                 <CardContent>
                   <Typography variant="body1" component="p">
                     {city}
