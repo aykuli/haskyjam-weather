@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { connect, RootStateOrAny } from 'react-redux';
 import { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+
+import { HistoryItem, Coordinates } from '../types';
+import { addCityToHistory } from '../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   marker: {
@@ -34,17 +38,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface MarkerProps {
-  latitude: number;
-  longitude: number;
-  // place: string;
+interface MapStateProps {
+  temperatureCurrent: number | null;
+  coordinates: Coordinates;
+  city: string;
+  country: string;
 }
 
-const MapMarker: React.FC<MarkerProps> = ({
-  latitude,
-  longitude,
-  //   info,
-}) => {
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+type Props = MapStateProps & DispatchProps;
+
+const MapMarker = (props: Props) => {
+  const { coordinates, temperatureCurrent, city, country } = props;
+  const { latitude, longitude } = coordinates;
+
   const [isShowPopup, setIsShowPopup] = useState(false);
 
   const styles = useStyles();
@@ -75,13 +85,30 @@ const MapMarker: React.FC<MarkerProps> = ({
           className={styles.popup}
         >
           <div>
-            <Typography variant="body1">city:</Typography>
-            <Typography variant="body1">country:</Typography>
+            <Typography variant="h3" component="p">{`${temperatureCurrent} °C`}</Typography>
+            <Typography variant="body2">{`${city}, ${country}`}</Typography>
           </div>
         </Popup>
       )}
     </>
   );
 };
+const mapStateToProps = (state: RootStateOrAny) => ({
+  coordinates: state.coordinates,
+  temperatureCurrent: state.temperature,
+  city: state.city,
+  country: state.country,
+});
 
-export default MapMarker;
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
+};
+
+export default connect<MapStateProps, DispatchProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapMarker);

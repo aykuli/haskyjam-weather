@@ -1,13 +1,23 @@
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
-import { connect } from 'react-redux';
-import { InputBase, ButtonGroup, Button } from '@material-ui/core';
+import { connect, RootStateOrAny } from 'react-redux';
+import { ReactDadata } from 'react-dadata';
+import { ButtonGroup, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles, fade, Theme, createStyles } from '@material-ui/core/styles';
 
-import { NAVBAR_BTNS } from '../constantas/common';
+import { NAVBAR_BTNS, SEARCH_PLACEHOLDER } from '../constantas/common';
+import { DADATA } from '../constantas/api-keys';
 
-import { changeCurrentTab as changeTab } from '../redux/actions';
+import { Coordinates, DadataSuggestion } from '../types';
+
+import {
+  changeCurrentTab as changeTab,
+  refreshCoordinates,
+  changeCity,
+  changeCountry,
+} from '../redux/actions';
+import { forwardGeocoding } from '../services/opencagedata';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +59,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2),
       height: '100%',
       position: 'absolute',
+      top: 0,
+      left: -40,
       pointerEvents: 'none',
       display: 'flex',
       alignItems: 'center',
@@ -57,26 +69,26 @@ const useStyles = makeStyles((theme: Theme) =>
     inputRoot: {
       minWidth: 250,
       width: '100%',
-      color: theme.palette.primary.contrastText,
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '25ch',
-        },
-      },
+      color: theme.palette.text.primary,
     },
   })
 );
 
-const ConnectedNavbar = (props: any) => {
-  const { changeCurrentTab, currentTab } = props;
+interface MapStateProps {
+  currentTab: string;
+}
+
+interface DispatchProps {
+  setCoordinates: (data: Coordinates) => void;
+  setCity: (str: string) => void;
+  setCountry: (str: string) => void;
+  changeCurrentTab: (newTab: string) => void;
+}
+
+type AppProps = MapStateProps & DispatchProps;
+
+const Navbar = (props: AppProps) => {
+  const { changeCurrentTab, currentTab, setCoordinates } = props;
 
   const styles = useStyles();
 
@@ -85,6 +97,16 @@ const ConnectedNavbar = (props: any) => {
   ) => {
     const { innerText } = e.target as HTMLButtonElement;
     changeCurrentTab(innerText);
+  };
+
+  const handleSearch = (e: DadataSuggestion) => {
+    console.log('1: ', e);
+    const settlement = e.data.city;
+    forwardGeocoding(settlement).then((data) => {
+      const coordinates = data.results[0].geometry;
+      console.log('forwardGeocoding data: ', coordinates);
+      setCoordinates({ latitude: coordinates.lat, longitude: coordinates.lng });
+    });
   };
 
   return (
@@ -111,26 +133,29 @@ const ConnectedNavbar = (props: any) => {
         <div className={styles.searchIcon}>
           <SearchIcon color="secondary" />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: styles.inputRoot,
-            input: styles.inputInput,
-          }}
-          inputProps={{ 'aria-label': 'search city' }}
-        />
+        <div className={styles.inputRoot}>
+          <ReactDadata
+            token={DADATA}
+            query=""
+            autoload
+            placeholder={SEARCH_PLACEHOLDER}
+            onChange={handleSearch}
+          />
+        </div>
       </div>
     </div>
   );
 };
-const mapStateToProps = ({ currentTab }: any) => ({ currentTab });
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    changeCurrentTab: (newTab: string) => dispatch(changeTab(newTab)),
-  };
+const mapStateToProps = (state: RootStateOrAny) => ({
+  currentTab: state.currentTab,
+});
+
+const mapDispatchToProps = {
+  changeCurrentTab: (newTab: string) => changeTab(newTab),
+  setCoordinates: (data: Coordinates) => refreshCoordinates(data),
+  setCity: (str: string) => changeCity(str),
+  setCountry: (str: string) => changeCountry(str),
 };
 
-const Navbar = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavbar);
-
-export default Navbar;
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: '5px 7px',
       },
     },
+    '& td, & th': {
+      fontSize: '1rem',
+    },
   },
   headRow: {
     backgroundColor: theme.palette.primary.main,
@@ -60,7 +63,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface MapStateProps {
-  coordinates: Coordinates;
   weather48Hours: Weather48HoursProp;
 }
 
@@ -71,7 +73,7 @@ interface OwnProps {
 type Props = MapStateProps & OwnProps;
 
 const DayWeather = (props: Props) => {
-  const { title, weather48Hours, coordinates } = props;
+  const { title, weather48Hours } = props;
   const styles = useStyles();
   const today = new Date();
   const day = title === NAVBAR_BTNS[1] ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000);
@@ -88,7 +90,7 @@ const DayWeather = (props: Props) => {
         <Typography variant="h2" component="h2">
           {title}
         </Typography>
-        <Typography variant="body1" component="p">
+        <Typography variant="body2" component="p">
           {date}
         </Typography>
         <TableContainer component={Paper}>
@@ -126,15 +128,12 @@ const DayWeather = (props: Props) => {
           </Table>
         </TableContainer>
       </div>
-      {coordinates.latitude !== 0 ? (
-        <Map latitude={coordinates.latitude} longitude={coordinates.longitude} place="MyPlace" />
-      ) : null}
+      <Map />
     </div>
   );
 };
 
 const mapStateToProps = (state: RootStateOrAny) => ({
-  coordinates: state.coordinates,
   weather48Hours: state.weather48Hours,
 });
 

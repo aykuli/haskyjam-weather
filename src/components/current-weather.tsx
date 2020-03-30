@@ -5,8 +5,8 @@ import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Fakerator from 'fakerator';
 
-import { addCityToHistory } from '../redux/actions';
 import getRandomColor from '../services/color-generator';
+import { addCityToHistory } from '../redux/actions';
 import { Coordinates, HistoryItem } from '../types';
 
 // TODO icons
@@ -61,10 +61,10 @@ const CurrentWeather = (props: Props) => {
     const id = fakerator.random.masked('aaa-AAA_999999:*');
     const color = getRandomColor();
     setNewCityToHistory({
-      color,
       id,
       city,
       coordinates,
+      color,
     });
   };
 
@@ -74,12 +74,12 @@ const CurrentWeather = (props: Props) => {
   return (
     <div className={styles.main}>
       <Typography variant="h1" component="p">{`${temperature} °C`}</Typography>
-      <Typography variant="body1" component="p">{`${city}, ${country}`}</Typography>
+      <Typography variant="body2" component="p">{`${city}, ${country}`}</Typography>
       <>
-        <Typography variant="body1" component="p">
+        <Typography variant="body2" component="p">
           {date}
         </Typography>
-        <Typography variant="body2" component="p">
+        <Typography variant="caption" component="p">
           {weatherInfo}
         </Typography>
       </>
@@ -106,10 +106,8 @@ const mapStateToProps = ({
   coordinates,
 });
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setNewCityToHistory: (history: HistoryItem) => dispatch(addCityToHistory(history)),
-  };
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentWeather);

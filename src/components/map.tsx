@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect, RootStateOrAny } from 'react-redux';
 import MapGL, { FlyToInterpolator, GeolocateControl, ScaleControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { easeCubic } from 'd3-ease';
@@ -8,6 +9,8 @@ import { Button } from '@material-ui/core';
 import MapMarker from './map-marker';
 
 import { MAPBOX_TOKEN } from '../constantas/api-keys';
+import { addCityToHistory } from '../redux/actions';
+import { HistoryItem, Coordinates } from '../types';
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
@@ -55,13 +58,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface MapProps {
-  latitude: number;
-  longitude: number;
-  place: string;
+interface MapStateProps {
+  coordinates: Coordinates;
 }
 
-const Map: React.FC<MapProps> = ({ latitude, longitude, place }) => {
+interface DispatchProps {
+  setNewCityToHistory: (history: HistoryItem) => void;
+}
+
+type Props = MapStateProps & DispatchProps;
+
+const Map = (props: Props) => {
+  const { coordinates } = props;
+  const { latitude, longitude } = coordinates;
   const styles = useStyles();
   const [viewport, setViewport] = useState({
     width: 650,
@@ -107,7 +116,7 @@ const Map: React.FC<MapProps> = ({ latitude, longitude, place }) => {
           attributionControl
           width="100%"
         >
-          <MapMarker latitude={latitude} longitude={longitude} />
+          <MapMarker />
           <div className={styles.scaler}>
             <ScaleControl maxWidth={100} unit="metric" />
           </div>
@@ -122,4 +131,12 @@ const Map: React.FC<MapProps> = ({ latitude, longitude, place }) => {
   );
 };
 
-export default Map;
+const mapStateToProps = (state: RootStateOrAny) => ({
+  coordinates: state.coordinates,
+});
+
+const mapDispatchToProps = {
+  setNewCityToHistory: (history: HistoryItem) => addCityToHistory(history),
+};
+
+export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Map);
