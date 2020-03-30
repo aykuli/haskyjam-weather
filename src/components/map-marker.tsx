@@ -39,7 +39,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface MapStateProps {
+  temperatureCurrent: number | null;
   coordinates: Coordinates;
+  city: string;
+  country: string;
 }
 
 interface DispatchProps {
@@ -49,7 +52,7 @@ interface DispatchProps {
 type Props = MapStateProps & DispatchProps;
 
 const MapMarker = (props: Props) => {
-  const { coordinates } = props;
+  const { coordinates, temperatureCurrent, city, country } = props;
   const { latitude, longitude } = coordinates;
 
   const [isShowPopup, setIsShowPopup] = useState(false);
@@ -82,8 +85,8 @@ const MapMarker = (props: Props) => {
           className={styles.popup}
         >
           <div>
-            <Typography variant="body1">city:</Typography>
-            <Typography variant="body1">country:</Typography>
+            <Typography variant="h3" component="p">{`${temperatureCurrent} °C`}</Typography>
+            <Typography variant="body2">{`${city}, ${country}`}</Typography>
           </div>
         </Popup>
       )}
@@ -93,6 +96,8 @@ const MapMarker = (props: Props) => {
 const mapStateToProps = (state: RootStateOrAny) => ({
   coordinates: state.coordinates,
   temperatureCurrent: state.temperature,
+  city: state.city,
+  country: state.country,
 });
 
 interface DispatchProps {

@@ -23,15 +23,14 @@ import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
 import DayWeather from './day-weather';
+import Input from './input';
 
 // contantas
-// import { CITIES_LIST, NAVBAR_BTNS } from '../constantas/common';
 import { NAVBAR_BTNS } from '../constantas/common';
-// import FAKE_HISTORY from '../services/fake-history';
 
 import { Coordinates, Weather48HoursProp } from '../types';
 
-// TODO round temparatures to 1number after comma
+// TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
   container: {
     position: 'relative',
@@ -66,11 +65,9 @@ const App = (props: any) => {
     setWeather48hours,
     setWeatherWeek,
   } = props;
-  // const isMainPage = currentTab === NAVBAR_BTNS[0];
+  // TODO вроде как CurrentWeather отличаетсяна разных страницах
 
   const styles = useStyles();
-
-  // const [citiesList, setCitiesList] = useState(FAKE_HISTORY); // TODO remove FAKE and place list
 
   useEffect(() => {
     getCoordinates().then((data) => {
@@ -96,16 +93,6 @@ const App = (props: any) => {
     });
   }, []);
 
-  // const handleClearHistory = (): void => {
-  //   localStorage.removeItem(CITIES_LIST);
-  //   setCitiesList([]);
-  // };
-
-  // const handleDeleteCity = (itemId: string) => {
-  //   const newCitiesList = citiesList.filter((item) => item.id !== itemId);
-  //   setCitiesList(newCitiesList);
-  // };
-
   const componentMaps = new Map();
   componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
@@ -117,6 +104,7 @@ const App = (props: any) => {
       <CssBaseline />
       <div className={styles.container}>
         <Navbar />
+        <Input />
         {temperature === null ? (
           <div className={styles.sceleton}>
             <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />

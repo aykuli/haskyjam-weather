@@ -40,8 +40,6 @@ const initialState: StoreType = {
 };
 
 const reducer = (state = initialState, action: any) => {
-  console.log('action: ', action);
-
   switch (action.type) {
     case REFRESH_COORDINATES:
       return {
