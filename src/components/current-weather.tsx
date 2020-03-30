@@ -5,8 +5,8 @@ import { Typography, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Fakerator from 'fakerator';
 
-import { addCityToHistory } from '../redux/actions';
 import getRandomColor from '../services/color-generator';
+import { addCityToHistory } from '../redux/actions';
 import { Coordinates, HistoryItem } from '../types';
 
 // TODO icons

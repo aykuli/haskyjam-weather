@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-useless-computed-key */
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Typography,
@@ -13,7 +14,9 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
-// TODO delete interpolate
+
+import { addCityToHistory, removeCityToHistory, clearHistory } from '../redux/actions';
+import { Coordinates, HistoryItem } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     padding: '10px 10px 40px',
   },
-  citiesList: {
+  history: {
     display: 'grid',
     gridTemplateColumns: '200px 200px 200px 200px',
     gridGap: '20px 20px',
@@ -63,12 +66,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     right: 10,
   },
 }));
-// TODO сохраняем в историю id, координаты и название города. координаты - для поиска погоды потом точно, название города - для показа на панели. id - чтобы удалить потом из истории при необходимости.
-interface SavedCitiesProps {
-  citiesList: any;
-  handleClearHistory: () => void;
-  handleDeleteCity: (item: string) => void;
-}
+
+// interface SavedCitiesProps {
+//   history: any;
+//   handleClearHistory: () => void;
+//   handleDeleteCity: (item: string) => void;
+// }
 
 interface CityData {
   id: string;
@@ -80,14 +83,23 @@ interface CityData {
   color: string;
 }
 
-const SavedCities: React.FC<SavedCitiesProps> = ({
-  citiesList,
-  handleClearHistory,
-  handleDeleteCity,
-}) => {
+interface MapStateProps {
+  history: Array<HistoryItem>;
+}
+
+interface MapDispatchProps {
+  setNewCityToHistory: (item: HistoryItem) => void;
+  deleteCityFromHistory: (id: string) => void;
+  setEmptyHistory: () => void;
+}
+
+type SavedCitiesProps = MapStateProps & MapDispatchProps;
+
+const SavedCities: React.FC<SavedCitiesProps> = (props) => {
+  const { history, setNewCityToHistory, deleteCityFromHistory, setEmptyHistory } = props;
   const styles = useStyles();
 
-  const showList = citiesList.length < 8 ? citiesList : citiesList.slice(0, 7);
+  const showList = history.length < 8 ? history : history.slice(0, 7);
 
   return (
     <div className={styles.container}>
@@ -95,7 +107,7 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
         Saved Cities
       </Typography>
       <Tooltip title="Clear history" aria-label="Clear history">
-        <Fab color="primary" className={styles.deleteAllBtn} onClick={handleClearHistory}>
+        <Fab color="primary" className={styles.deleteAllBtn} onClick={setEmptyHistory}>
           <DeleteIcon />
         </Fab>
       </Tooltip>
@@ -104,8 +116,8 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
           Yout history is empty. You can add place clicking on Add button higher.
         </Alert>
       ) : (
-        <div className={styles.citiesList}>
-          {showList.map((cityData: CityData, i: number) => {
+        <div className={styles.history}>
+          {showList.map((cityData: HistoryItem, i: number) => {
             const { id, city, color } = cityData;
             return (
               <Card key={id} className={styles.city} style={{ backgroundColor: color }}>
@@ -119,7 +131,7 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
                     <Fab
                       size="small"
                       className={styles.deleteBtn}
-                      onClick={() => handleDeleteCity(id)}
+                      onClick={() => deleteCityFromHistory('aaa-AAA_999999:1')}
                     >
                       <DeleteIcon />
                     </Fab>
@@ -137,4 +149,15 @@ const SavedCities: React.FC<SavedCitiesProps> = ({
   );
 };
 
-export default SavedCities;
+const mapStateToProps = ({ history }: MapStateProps) => ({ history });
+
+// TODO refactor mapDispatchToProps
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setNewCityToHistory: (history: HistoryItem) => dispatch(addCityToHistory(history)),
+    deleteCityFromHistory: (id: string) => dispatch(removeCityToHistory(id)),
+    setEmptyHistory: () => dispatch(clearHistory()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SavedCities);

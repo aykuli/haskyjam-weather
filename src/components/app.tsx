@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
@@ -25,8 +25,9 @@ import Week from './week';
 import DayWeather from './day-weather';
 
 // contantas
-import { CITIES_LIST, NAVBAR_BTNS } from '../constantas/common';
-import FAKE_HISTORY from '../services/fake-history';
+// import { CITIES_LIST, NAVBAR_BTNS } from '../constantas/common';
+import { NAVBAR_BTNS } from '../constantas/common';
+// import FAKE_HISTORY from '../services/fake-history';
 
 import { Coordinates, Weather48HoursProp } from '../types';
 
@@ -69,7 +70,7 @@ const App = (props: any) => {
 
   const styles = useStyles();
 
-  const [citiesList, setCitiesList] = useState(FAKE_HISTORY); // TODO remove FAKE and place list
+  // const [citiesList, setCitiesList] = useState(FAKE_HISTORY); // TODO remove FAKE and place list
 
   useEffect(() => {
     getCoordinates().then((data) => {
@@ -93,27 +94,20 @@ const App = (props: any) => {
           console.log('e: ', e);
         });
     });
-  }, [citiesList]);
+  }, []);
 
-  const handleClearHistory = (): void => {
-    localStorage.removeItem(CITIES_LIST);
-    setCitiesList([]);
-  };
+  // const handleClearHistory = (): void => {
+  //   localStorage.removeItem(CITIES_LIST);
+  //   setCitiesList([]);
+  // };
 
-  const handleDeleteCity = (itemId: string) => {
-    const newCitiesList = citiesList.filter((item) => item.id !== itemId);
-    setCitiesList(newCitiesList);
-  };
+  // const handleDeleteCity = (itemId: string) => {
+  //   const newCitiesList = citiesList.filter((item) => item.id !== itemId);
+  //   setCitiesList(newCitiesList);
+  // };
 
   const componentMaps = new Map();
-  componentMaps.set(
-    NAVBAR_BTNS[0],
-    <SavedCities
-      citiesList={citiesList}
-      handleClearHistory={handleClearHistory}
-      handleDeleteCity={handleDeleteCity}
-    />
-  );
+  componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
   componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
   componentMaps.set(NAVBAR_BTNS[3], <Week />);

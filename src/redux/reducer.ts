@@ -5,15 +5,23 @@ import {
   CHANGE_COUNTRY,
   CHANGE_TODAY_WEATHER_INFO,
   CHANGE_CURRENT_TEMPERATURE,
-  ADD_CITY_TO_HISTORY,
   CHANGE_WEATHER_FOR_NEXT_48_HOURS,
   CHANGE_WEEK_WEATHER,
+  ADD_CITY_TO_HISTORY,
+  DELETE_CITY_FROM_HISTORY,
+  CLEAR_HISTORY,
 } from './action-types';
 import { NAVBAR_BTNS, CITIES_LIST } from '../constantas/common';
 import { StoreType } from '../types';
 
 const ls = localStorage.getItem(CITIES_LIST);
 const history = ls === null ? [] : JSON.parse(ls);
+// HistoryItem  is shape of {
+//   color,
+//   id,
+//   city,
+//   coordinates,
+// }
 
 const initialState: StoreType = {
   currentTab: NAVBAR_BTNS[0],
@@ -64,11 +72,6 @@ const reducer = (state = initialState, action: any) => {
         ...state,
         temperature: action.temperature,
       };
-    case ADD_CITY_TO_HISTORY:
-      return {
-        ...state,
-        history: [...state.history, action.history],
-      };
     case CHANGE_WEATHER_FOR_NEXT_48_HOURS:
       return {
         ...state,
@@ -78,6 +81,21 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         weatherWeek: action.weatherWeek,
+      };
+    case ADD_CITY_TO_HISTORY:
+      return {
+        ...state,
+        history: [...state.history, action.history],
+      };
+    case DELETE_CITY_FROM_HISTORY:
+      return {
+        ...state,
+        history: [...state.history, action.history],
+      };
+    case CLEAR_HISTORY:
+      return {
+        ...state,
+        history: [],
       };
     default:
       return state;
