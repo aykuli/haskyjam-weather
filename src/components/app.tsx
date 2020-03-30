@@ -16,6 +16,8 @@ import {
   changeWeatherForNext48Hours,
   changeWeatherWeek,
 } from '../redux/actions';
+import { Coordinates, Weather48HoursProp, WeatherWeekProp } from '../types';
+import { reverseGeocoding } from '../services/opencagedata';
 
 // components
 import Navbar from './navbar';
@@ -26,9 +28,6 @@ import DayWeather from './day-weather';
 
 // contantas
 import { NAVBAR_BTNS } from '../constantas/common';
-
-import { Coordinates, Weather48HoursProp, WeatherWeekProp } from '../types';
-import { reverseGeocoding } from '../services/opencagedata';
 
 // TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
@@ -166,7 +165,7 @@ const mapDispatchToProps = {
   setWeatherWeek: (data: WeatherWeekProp) => changeWeatherWeek(data),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(App);
 
 // TODO env-cmd разобраться что за модуль
 // TODO App ConnectedApp поменять местами

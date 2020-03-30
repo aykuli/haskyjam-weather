@@ -15,8 +15,8 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { removeCityToHistory, clearHistory } from '../redux/actions';
-import { HistoryItem } from '../types';
+import { removeCityToHistory, clearHistory, refreshCoordinates } from '../redux/actions';
+import { HistoryItem, Coordinates } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridGap: '20px 20px',
     ['@media (max-width: 900px)']: {
       gridTemplateColumns: '200px 200px',
+    },
+    '&:hover': {
+      cursor: 'pointer',
     },
   },
   city: {
@@ -75,16 +78,24 @@ interface MapStateProps {
 interface MapDispatchProps {
   deleteCityFromHistory: (id: string) => void;
   setEmptyHistory: () => void;
+  setCoordinates: (data: Coordinates) => void;
 }
 
 type SavedCitiesProps = MapStateProps & MapDispatchProps;
 
 const SavedCities: React.FC<SavedCitiesProps> = (props) => {
-  const { history, deleteCityFromHistory, setEmptyHistory } = props;
+  const { history, deleteCityFromHistory, setEmptyHistory, setCoordinates } = props;
   const styles = useStyles();
 
   const showList = history.length < 8 ? history.slice() : history.slice(0, 7);
   showList.reverse();
+
+  const handleRequest = (id: string, coordinates: Coordinates) => {
+    console.log(id);
+    console.log(coordinates);
+
+    setCoordinates(coordinates);
+  };
 
   return (
     <div className={styles.container}>
@@ -103,15 +114,13 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
       ) : (
         <div className={styles.history}>
           {showList.map((cityData: HistoryItem) => {
-            const { id, city, color } = cityData;
+            const { id, city, color, coordinates } = cityData;
             return (
               <Card
                 key={id}
                 className={styles.city}
                 style={{ backgroundColor: color }}
-                onClick={() => {
-                  console.log('click');
-                }}
+                onClick={() => handleRequest(id, coordinates)}
               >
                 <CardContent>
                   <Typography variant="body1" component="p">
@@ -148,6 +157,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     deleteCityFromHistory: (id: any) => dispatch(removeCityToHistory(id)),
     setEmptyHistory: () => dispatch(clearHistory()),
+    setCoordinates: (data: Coordinates) => refreshCoordinates(data),
   };
 };
 

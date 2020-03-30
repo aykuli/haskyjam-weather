@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect, RootStateOrAny } from 'react-redux';
 import MapGL, { FlyToInterpolator, GeolocateControl, ScaleControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -88,13 +88,17 @@ const Map = (props: Props) => {
       ...viewport,
       longitude,
       latitude,
-      zoom: 13,
+      zoom: 10,
       transitionDuration: 'auto',
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: easeCubic,
     };
     setViewport(viewportCurrent);
   };
+
+  useEffect(() => {
+    gotoCurrentPlace();
+  }, [coordinates]);
 
   return (
     <>

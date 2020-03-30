@@ -11,7 +11,6 @@ import { addCityToHistory } from '../redux/actions';
 const useStyles = makeStyles((theme: Theme) => ({
   marker: {
     transform: 'translate(0, 0)',
-    // color: theme.palette.primary.main,
   },
   user: {
     position: 'relative',
