@@ -92,7 +92,7 @@ const App = (props: AppProps) => {
   } = props;
 
   const styles = useStyles();
-  const [isShowPopup, setIsShowPopup] = useState<boolean>(true);
+  const [isShowPopup, setIsShowPopup] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>('Все в порядке!');
 
   useEffect(() => {

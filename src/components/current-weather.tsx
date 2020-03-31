@@ -74,7 +74,10 @@ const CurrentWeather = (props: Props) => {
   return (
     <div className={styles.main}>
       <Typography variant="h1" component="p">{`${temperature} °C`}</Typography>
-      <Typography variant="body2" component="p">{`${city}, ${country}`}</Typography>
+      <Typography variant="body2" component="p">
+        {city ? `${city}, ` : ''}
+        {country ? `${country}` : ''}
+      </Typography>
       <>
         <Typography variant="body2" component="p">
           {date}
