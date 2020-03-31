@@ -5,6 +5,7 @@ import { Paper, Typography } from '@material-ui/core';
 
 import { HistoryItem, WeatherWeekProp } from '../types';
 import { addCityToHistory } from '../redux/actions';
+import { numberFit, temperatureZeroFit } from '../utils/temperature-fit';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -77,6 +78,7 @@ const Week = (props: MapProps) => {
         {weatherWeek
           ? week.map((item): any => {
               const { weekDay, date, temperature } = item;
+              const temperatureFitted = temperatureZeroFit(numberFit(temperature));
               return (
                 <Paper elevation={3} className={styles.day} key={weekDay}>
                   <Typography variant="h3" component="h3">
@@ -86,7 +88,7 @@ const Week = (props: MapProps) => {
                     {weekDay}
                   </Typography>
                   <Typography variant="h1" component="p" className={styles.temperature}>
-                    {`${temperature} °C`}
+                    {`${temperatureFitted} °C`}
                   </Typography>
                 </Paper>
               );
