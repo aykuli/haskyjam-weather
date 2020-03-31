@@ -27,6 +27,7 @@ import SavedCities from './saved-cities';
 import Week from './week';
 import DayWeather from './day-weather';
 import PopupMessage from './popup-message';
+import ErrorBoundry from './error-boundry';
 
 // contantas
 import {
@@ -187,22 +188,24 @@ const App = (props: AppProps) => {
   // TODO может скелетоны перенести внутрь CurrentWeather component
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {isShowPopup ? <PopupMessage msg={msg} /> : null}
-      <div className={styles.container}>
-        <Navbar />
-        {temperature === null ? (
-          <div className={styles.sceleton}>
-            <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />
-            <Skeleton variant="text" width={50} height={70} />
-            <Skeleton variant="text" width={300} height={50} />
-            <Skeleton variant="rect" width={300} height={118} />
-          </div>
-        ) : (
-          <CurrentWeather />
-        )}
-        {componentMaps.get(currentTab)}
-      </div>
+      <ErrorBoundry>
+        <CssBaseline />
+        {isShowPopup ? <PopupMessage msg={msg} /> : null}
+        <div className={styles.container}>
+          <Navbar />
+          {temperature === null ? (
+            <div className={styles.sceleton}>
+              <Skeleton variant="circle" width={50} height={50} className={styles.addBtn} />
+              <Skeleton variant="text" width={50} height={70} />
+              <Skeleton variant="text" width={300} height={50} />
+              <Skeleton variant="rect" width={300} height={118} />
+            </div>
+          ) : (
+            <CurrentWeather />
+          )}
+          {componentMaps.get(currentTab)}
+        </div>
+      </ErrorBoundry>
     </ThemeProvider>
   );
 };
