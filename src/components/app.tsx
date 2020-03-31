@@ -165,6 +165,11 @@ const App = (props: AppProps) => {
             setIsShowPopup(false);
           }, 1000);
         });
+    } else {
+      setMsg(FETCH_GEOCODING_FAILED);
+      timerId = setTimeout(() => {
+        setIsShowPopup(false);
+      }, 1000);
     }
 
     return () => {

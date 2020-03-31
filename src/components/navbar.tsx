@@ -11,12 +11,7 @@ import { DADATA } from '../constantas/api-keys';
 
 import { Coordinates, DadataSuggestion } from '../types';
 
-import {
-  changeCurrentTab as changeTab,
-  refreshCoordinates,
-  changeCity,
-  changeCountry,
-} from '../redux/actions';
+import { changeCurrentTab as changeTab, refreshCoordinates } from '../redux/actions';
 import { forwardGeocoding } from '../services/opencagedata';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -80,8 +75,6 @@ interface MapStateProps {
 
 interface DispatchProps {
   setCoordinates: (data: Coordinates) => void;
-  setCity: (str: string) => void;
-  setCountry: (str: string) => void;
   changeCurrentTab: (newTab: string) => void;
 }
 
@@ -100,9 +93,17 @@ const Navbar = (props: AppProps) => {
   };
 
   const handleSearch = (e: DadataSuggestion) => {
-    console.log('1: ', e);
-    const settlement = e.data.city;
-    forwardGeocoding(settlement).then((data) => {
+    console.log('e: ', e);
+    const { city, settlement, area } = e.data;
+    let place;
+    if (city) {
+      place = city;
+    } else if (settlement) {
+      place = settlement;
+    } else {
+      place = area;
+    }
+    forwardGeocoding(place).then((data) => {
       const coordinates = data.results[0].geometry;
       setCoordinates({ latitude: coordinates.lat, longitude: coordinates.lng });
     });
@@ -153,8 +154,6 @@ const mapStateToProps = (state: RootStateOrAny) => ({
 const mapDispatchToProps = {
   changeCurrentTab: (newTab: string) => changeTab(newTab),
   setCoordinates: (data: Coordinates) => refreshCoordinates(data),
-  setCity: (str: string) => changeCity(str),
-  setCountry: (str: string) => changeCountry(str),
 };
 
 export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Navbar);
