@@ -22,8 +22,6 @@ interface Data {
   longitude: number;
 }
 
-const rows = [];
-
 interface HeadCell {
   id: keyof Data;
   label: string;
@@ -93,16 +91,18 @@ const EnhancedTableToolbar: React.FC<TableToolbarProps> = ({ setEmptyHistory }) 
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: '100%',
     },
     paper: {
       width: '100%',
-      marginBottom: theme.spacing(2),
+      padding: '20px 0 40px',
     },
-    table: {},
+    table: {
+      padding: 20,
+    },
     visuallyHidden: {
       border: 0,
       clip: 'rect(0 0 0 0)',
@@ -130,9 +130,9 @@ type HistoryTableProps = StateProps & DispatchProps;
 const HistoryTable: React.FC<HistoryTableProps> = (props) => {
   const { history, setEmptyHistory } = props;
   const showHistory = history.slice().reverse();
-  console.log('history: ', history);
-  console.log('showHistory: ', showHistory);
+
   const classes = useStyles();
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -145,7 +145,7 @@ const HistoryTable: React.FC<HistoryTableProps> = (props) => {
     setPage(0);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, showHistory.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -160,19 +160,21 @@ const HistoryTable: React.FC<HistoryTableProps> = (props) => {
           >
             <EnhancedTableHead />
             <TableBody>
-              {showHistory.map((row) => {
-                const { id, city, coordinates } = row;
-                const { latitude, longitude } = coordinates;
-                const fixedLat = latitude.toFixed(2);
-                const fixedLng = longitude.toFixed(2);
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={id}>
-                    <TableCell align="left">{city}</TableCell>
-                    <TableCell align="right">{fixedLat}</TableCell>
-                    <TableCell align="right">{fixedLng}</TableCell>
-                  </TableRow>
-                );
-              })}
+              {showHistory
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  const { id, city, coordinates } = row;
+                  const { latitude, longitude } = coordinates;
+                  const fixedLat = latitude.toFixed(2);
+                  const fixedLng = longitude.toFixed(2);
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={id}>
+                      <TableCell align="left">{city}</TableCell>
+                      <TableCell align="right">{fixedLat}</TableCell>
+                      <TableCell align="right">{fixedLng}</TableCell>
+                    </TableRow>
+                  );
+                })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 33 * emptyRows }}>
                   <TableCell colSpan={6} />
