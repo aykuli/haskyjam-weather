@@ -165,8 +165,8 @@ const HistoryTable: React.FC<HistoryTableProps> = (props) => {
                 .map((row) => {
                   const { id, city, coordinates } = row;
                   const { latitude, longitude } = coordinates;
-                  const fixedLat = latitude.toFixed(2);
-                  const fixedLng = longitude.toFixed(2);
+                  const fixedLat = latitude ? latitude.toFixed(2) : null;
+                  const fixedLng = longitude ? longitude.toFixed(2) : null;
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={id}>
                       <TableCell align="left">{city}</TableCell>

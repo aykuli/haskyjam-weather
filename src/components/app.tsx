@@ -127,44 +127,45 @@ const App = (props: AppProps) => {
   useEffect(() => {
     const { latitude, longitude } = coordinates;
     let timerId: any;
+    if (latitude && longitude) {
+      reverseGeocoding(latitude, longitude)
+        .then((data) => {
+          const { city, country } = data.results[0].components;
+          setCity(city);
+          setCountry(country);
+          if (city) {
+            window.history.pushState({ page: city }, city, `city=${city}`);
+          }
+        })
+        .catch((e) => {
+          console.log('reverseGeocoding error: ', e);
+          setIsShowPopup(true);
+          setMsg(FETCH_GEOCODING_FAILED);
+          timerId = setTimeout(() => {
+            setIsShowPopup(false);
+          }, 1000);
+        });
+      getWeatherByCoordinates(latitude, longitude, 'ru')
+        .then((weather) => {
+          setWeather48hours(weather.hourly);
+          setWeatherWeek(weather.daily);
 
-    reverseGeocoding(latitude, longitude)
-      .then((data) => {
-        const { city, country } = data.results[0].components;
-        setCity(city);
-        setCountry(country);
-        if (city) {
-          window.history.pushState({ page: city }, city, `city=${city}`);
-        }
-      })
-      .catch((e) => {
-        console.log('reverseGeocoding error: ', e);
-        setIsShowPopup(true);
-        setMsg(FETCH_GEOCODING_FAILED);
-        timerId = setTimeout(() => {
-          setIsShowPopup(false);
-        }, 1000);
-      });
-    getWeatherByCoordinates(latitude, longitude, 'ru')
-      .then((weather) => {
-        setWeather48hours(weather.hourly);
-        setWeatherWeek(weather.daily);
+          const numberFitted = temperatureZeroFit(numberFit(weather.currently.temperature));
+          setCurrentTemperature(numberFitted);
+          const windFitted = numberFit(weather.currently.windSpeed);
 
-        const numberFitted = temperatureZeroFit(numberFit(weather.currently.temperature));
-        setCurrentTemperature(numberFitted);
-        const windFitted = numberFit(weather.currently.windSpeed);
-
-        const txt = `${weather.currently.summary}, Ветер - ${windFitted} м/с`;
-        setWeatherInfo(txt);
-      })
-      .catch((e) => {
-        console.log('getWeatherByCoordinates error: ', e);
-        setIsShowPopup(true);
-        setMsg(FETCH_WEATHER_FAILED);
-        timerId = setTimeout(() => {
-          setIsShowPopup(false);
-        }, 1000);
-      });
+          const txt = `${weather.currently.summary}, Ветер - ${windFitted} м/с`;
+          setWeatherInfo(txt);
+        })
+        .catch((e) => {
+          console.log('getWeatherByCoordinates error: ', e);
+          setIsShowPopup(true);
+          setMsg(FETCH_WEATHER_FAILED);
+          timerId = setTimeout(() => {
+            setIsShowPopup(false);
+          }, 1000);
+        });
+    }
 
     return () => {
       clearTimeout(timerId);
