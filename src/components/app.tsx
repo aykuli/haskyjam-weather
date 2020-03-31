@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect, RootStateOrAny } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
@@ -26,9 +26,15 @@ import CurrentWeather from './current-weather';
 import SavedCities from './saved-cities';
 import Week from './week';
 import DayWeather from './day-weather';
+import PopupMessage from './popup-message';
 
 // contantas
-import { NAVBAR_BTNS } from '../constantas/common';
+import {
+  NAVBAR_BTNS,
+  FETCH_WEATHER_FAILED,
+  FETCH_GEOCODING_FAILED,
+  FETCH_COORDINATES_FAILED,
+} from '../constantas/common';
 
 // TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
@@ -86,14 +92,28 @@ const App = (props: AppProps) => {
   } = props;
 
   const styles = useStyles();
+  const [isShowPopup, setIsShowPopup] = useState<boolean>(true);
+  const [msg, setMsg] = useState<string>('Все в порядке!');
 
   useEffect(() => {
-    getCoordinates().then((data) => {
-      console.log('getCoordinates data: ', data);
-      const { latitude, longitude } = data;
+    let timerId: any;
+    getCoordinates()
+      .then((data) => {
+        const { latitude, longitude } = data;
 
-      setCoordinates({ latitude, longitude });
-    });
+        setCoordinates({ latitude, longitude });
+      })
+      .catch((e) => {
+        console.log('getCoordinates error: ', e);
+        setMsg(FETCH_COORDINATES_FAILED);
+        timerId = setTimeout(() => {
+          setIsShowPopup(false);
+        }, 1000);
+      });
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [
     setCoordinates,
     setCity,
@@ -106,15 +126,25 @@ const App = (props: AppProps) => {
 
   useEffect(() => {
     const { latitude, longitude } = coordinates;
-    reverseGeocoding(latitude, longitude).then((data) => {
-      // const timezone = data.results[0].annotations.timezone.name;
-      const { city, country } = data.results[0].components;
-      setCity(city);
-      setCountry(country);
-      if (city) {
-        window.history.pushState({ page: city }, city, `city=${city}`);
-      }
-    });
+    let timerId: any;
+    reverseGeocoding(latitude, longitude)
+      .then((data) => {
+        // const timezone = data.results[0].annotations.timezone.name;
+        const { city, country } = data.results[0].components;
+        setCity(city);
+        setCountry(country);
+        if (city) {
+          window.history.pushState({ page: city }, city, `city=${city}`);
+        }
+      })
+      .catch((e) => {
+        console.log('reverseGeocoding error: ', e);
+        setIsShowPopup(true);
+        setMsg(FETCH_GEOCODING_FAILED);
+        timerId = setTimeout(() => {
+          setIsShowPopup(false);
+        }, 1000);
+      });
     getWeatherByCoordinates(latitude, longitude, 'ru')
       .then((weather) => {
         console.log('weather: ', weather);
@@ -129,9 +159,17 @@ const App = (props: AppProps) => {
         setWeatherInfo(txt);
       })
       .catch((e) => {
-        console.log('error: ', e);
-        // TODO show popup with error
+        console.log('getWeatherByCoordinates error: ', e);
+        setIsShowPopup(true);
+        setMsg(FETCH_WEATHER_FAILED);
+        timerId = setTimeout(() => {
+          setIsShowPopup(false);
+        }, 1000);
       });
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [
     coordinates,
     setCity,
@@ -150,6 +188,7 @@ const App = (props: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {isShowPopup ? <PopupMessage msg={msg} /> : null}
       <div className={styles.container}>
         <Navbar />
         {temperature === null ? (
