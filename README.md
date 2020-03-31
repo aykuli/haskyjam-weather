@@ -17,7 +17,18 @@ https://drive.google.com/open?id=1GAa1KQh98or7Ur51AMGw_wMKGi9VHj0_
 ## 2. [Trello](https://trello.com/b/jFjR7ocW/haskyjam-weather)
 
 
-## 3. Available Scripts
+## 3. Used technologies
+
+    React, Redux, Typescript - main core,
+    material-ui - decoration,
+    
+
+    APIs:   https://ipinfo.io - for getting coordinates by IP address,
+            https://api.darksky.net - for weather data,
+            https://api.opencagedata.com/ - for getting settlement names,
+            https://Dadata.com - for getting searched city from FGOS database.
+
+## 4. Available Scripts
 
 In the project directory, you can run:
 
@@ -33,3 +44,14 @@ You will also see any lint errors in the console.
 
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
+
+## 5. TODO
+
+ - Add ErrorBoundary component
+ - if there no city, look up village, ifno village, look up region.
+ - round weather emperature to 1 number after comma
+ - move tokens in env=production version
+ - icons for weather
+ - we can change map theme
+ - show all history button shows popup table with history
+ - if fetch error show uuserfriendly message

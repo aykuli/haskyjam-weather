@@ -84,7 +84,7 @@ const App = (props: AppProps) => {
     setWeather48hours,
     setWeatherWeek,
   } = props;
-  // TODO вроде как CurrentWeather отличаетсяна разных страницах
+
   const styles = useStyles();
 
   useEffect(() => {
@@ -141,7 +141,6 @@ const App = (props: AppProps) => {
     setWeatherInfo,
     setWeatherWeek,
   ]);
-  // TODO delete from mapStateProps coordinates
   const componentMaps = new Map();
   componentMaps.set(NAVBAR_BTNS[0], <SavedCities />);
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
@@ -188,4 +187,3 @@ const mapDispatchToProps = {
 export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(App);
 
 // TODO env-cmd разобраться что за модуль
-// TODO App ConnectedApp поменять местами

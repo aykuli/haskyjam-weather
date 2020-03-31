@@ -3,6 +3,10 @@
   "homepage": "./",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aykuli/haskyjam-weather/haskyjam-weather.git"
+  },
   "dependencies": {
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",

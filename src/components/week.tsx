@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface MapStateProps {
-  weatherWeek: WeatherWeekProp; // TODO check all any types
+  weatherWeek: WeatherWeekProp;
 }
 
 interface DispatchProps {
@@ -34,8 +34,6 @@ interface DispatchProps {
 }
 
 type MapProps = MapStateProps & DispatchProps;
-
-// TODO icons
 
 const Week = (props: MapProps) => {
   const { weatherWeek } = props;
