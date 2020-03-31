@@ -127,6 +127,7 @@ const App = (props: AppProps) => {
   useEffect(() => {
     const { latitude, longitude } = coordinates;
     let timerId: any;
+
     reverseGeocoding(latitude, longitude)
       .then((data) => {
         const { city, country } = data.results[0].components;

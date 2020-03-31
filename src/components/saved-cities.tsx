@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-useless-computed-key */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, RootStateOrAny } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+import HistoryModal from './history-modal';
 
 import { removeCityToHistory, clearHistory, refreshCoordinates } from '../redux/actions';
 import { HistoryItem, Coordinates } from '../types';
@@ -85,16 +87,19 @@ type SavedCitiesProps = StateProps & DispatchProps;
 
 const SavedCities: React.FC<SavedCitiesProps> = (props) => {
   const { history, deleteCityFromHistory, setEmptyHistory, setCoordinates } = props;
+  const [isShowHistoryModal, setIsShowHistoryModal] = useState<boolean>(false);
   const styles = useStyles();
 
   const showList = history.length < 8 ? history.slice() : history.slice(0, 7);
   showList.reverse();
 
-  const handleRequest = (id: string, coordinates: Coordinates) => {
-    console.log(id);
-    console.log(coordinates);
-
+  const handleRequest = (coordinates: Coordinates) => {
     setCoordinates(coordinates);
+  };
+
+  const handleShowHistory = () => {
+    console.log('show history');
+    setIsShowHistoryModal(!isShowHistoryModal);
   };
 
   return (
@@ -120,7 +125,7 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
                 key={id}
                 className={styles.city}
                 style={{ backgroundColor: color }}
-                onClick={() => handleRequest(id, coordinates)}
+                onClick={() => handleRequest(coordinates)}
               >
                 <CardContent>
                   <Typography variant="body1" component="p">
@@ -141,14 +146,21 @@ const SavedCities: React.FC<SavedCitiesProps> = (props) => {
               </Card>
             );
           })}
-          <Button variant="contained" className={styles.showHistory}>
+          <Button variant="contained" className={styles.showHistory} onClick={handleShowHistory}>
             Показать всю историю
           </Button>
         </div>
       )}
+      {isShowHistoryModal ? (
+        <HistoryModal
+          isOpen={isShowHistoryModal}
+          hideHistory={() => setIsShowHistoryModal(false)}
+        />
+      ) : null}
     </div>
   );
 };
+
 const mapStateToProps = (state: RootStateOrAny) => ({
   history: state.history,
 });
