@@ -16,6 +16,7 @@ import {
 import Map from './map';
 
 import { NAVBAR_BTNS } from '../constantas/common';
+import { numberFit, temperatureZeroFit } from '../utils/temperature-fit';
 import { Weather48HoursProp, HistoryItem } from '../types';
 import { addCityToHistory } from '../redux/actions';
 
@@ -110,15 +111,16 @@ const DayWeather = (props: Props) => {
                     const hoursView = (hour: number) => (hour < 10 ? `0${hour}` : hour);
                     const isRender =
                       level === timeConverted.getDate() && timeConverted.getHours() % 3 === 0;
-
+                    const temperatureFitted = temperatureZeroFit(numberFit(temperature));
+                    const windFitted = numberFit(windSpeed);
                     return isRender ? (
                       <TableRow key={item.time}>
                         <TableCell>
                           {`${hoursView(timeConverted.getHours())}: ${timeConverted.getMinutes()}0`}
                         </TableCell>
-                        <TableCell>{`${temperature} °C`}</TableCell>
+                        <TableCell>{`${temperatureFitted} °C`}</TableCell>
                         <TableCell>{summary}</TableCell>
-                        <TableCell>{`${windSpeed} м/с`}</TableCell>
+                        <TableCell>{`${windFitted} м/с`}</TableCell>
                       </TableRow>
                     ) : null;
                   })

@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import theme from '../themes/theme';
 import getCoordinates from '../services/get-coordinates';
 import getWeatherByCoordinates from '../services/get-weather';
+import { numberFit, temperatureZeroFit } from '../utils/temperature-fit';
 import {
   refreshCoordinates,
   changeCity,
@@ -104,7 +105,6 @@ const App = (props: AppProps) => {
   ]);
 
   useEffect(() => {
-    console.log('здесь же должно меняться!!!');
     const { latitude, longitude } = coordinates;
     reverseGeocoding(latitude, longitude).then((data) => {
       // const timezone = data.results[0].annotations.timezone.name;
@@ -114,15 +114,18 @@ const App = (props: AppProps) => {
       if (city) {
         window.history.pushState({ page: city }, city, `city=${city}`);
       }
-      // console.log('window.history: ', window.history)
     });
     getWeatherByCoordinates(latitude, longitude, 'ru')
       .then((weather) => {
         console.log('weather: ', weather);
         setWeather48hours(weather.hourly);
         setWeatherWeek(weather.daily);
-        setCurrentTemperature(weather.currently.temperature);
-        const txt = `${weather.currently.summary}, Ветер - ${weather.currently.windSpeed} м/с`;
+
+        const numberFitted = temperatureZeroFit(numberFit(weather.currently.temperature));
+        setCurrentTemperature(numberFitted);
+        const windFitted = numberFit(weather.currently.windSpeed);
+
+        const txt = `${weather.currently.summary}, Ветер - ${windFitted} м/с`;
         setWeatherInfo(txt);
       })
       .catch((e) => {
