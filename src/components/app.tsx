@@ -37,7 +37,6 @@ import {
   FETCH_COORDINATES_FAILED,
 } from '../constantas/common';
 
-// TODO round temparatures to 1 number after comma
 const useStyles = makeStyles(() => ({
   container: {
     position: 'relative',
@@ -130,7 +129,6 @@ const App = (props: AppProps) => {
     let timerId: any;
     reverseGeocoding(latitude, longitude)
       .then((data) => {
-        // const timezone = data.results[0].annotations.timezone.name;
         const { city, country } = data.results[0].components;
         setCity(city);
         setCountry(country);
@@ -148,7 +146,6 @@ const App = (props: AppProps) => {
       });
     getWeatherByCoordinates(latitude, longitude, 'ru')
       .then((weather) => {
-        console.log('weather: ', weather);
         setWeather48hours(weather.hourly);
         setWeatherWeek(weather.daily);
 
@@ -185,7 +182,6 @@ const App = (props: AppProps) => {
   componentMaps.set(NAVBAR_BTNS[1], <DayWeather title={NAVBAR_BTNS[1]} />);
   componentMaps.set(NAVBAR_BTNS[2], <DayWeather title={NAVBAR_BTNS[2]} />);
   componentMaps.set(NAVBAR_BTNS[3], <Week />);
-  // TODO может скелетоны перенести внутрь CurrentWeather component
   return (
     <ThemeProvider theme={theme}>
       <ErrorBoundry>
@@ -227,5 +223,3 @@ const mapDispatchToProps = {
 };
 
 export default connect<MapStateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(App);
-
-// TODO env-cmd разобраться что за модуль

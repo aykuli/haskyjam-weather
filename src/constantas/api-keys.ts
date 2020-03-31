@@ -6,4 +6,4 @@ export const MAPBOX_TOKEN =
 export const DADATA = '41abac0b9197748c810ee5b27d23d04998ecc55b';
 export const OPENCAGEDATA_KEY = '08e88a2c40fb4a34966ad1a41752ff28';
 
-// TODO переснести в env=production
+// TODO переснести в env=production env-cmd
