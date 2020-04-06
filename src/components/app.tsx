@@ -133,9 +133,9 @@ const App = (props: AppProps) => {
           const { city, country } = data.results[0].components;
           setCity(city);
           setCountry(country);
-          if (city) {
-            window.history.pushState({ page: city }, city, `city=${city}`);
-          }
+          // if (city) {
+          //   window.history.pushState({ page: city }, city, `city=${city}`);
+          // }
         })
         .catch((e) => {
           console.log('reverseGeocoding error: ', e);
