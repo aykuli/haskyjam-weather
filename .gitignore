@@ -24,3 +24,4 @@ yarn-error.log*
 
 /task
 package-lock.json
+.code-workspace
